@@ -1,0 +1,9 @@
+- name: Install nvim plugins
+  become: yes
+  shell: |
+    cd "{{ lookup('env', 'HOME') }}/.config/nvim/lua/pollo"
+    nvim --headless -c ':e packer.lua' -c ':so %' -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+  tags:
+    - install
+    - dotfiles
+    - stow

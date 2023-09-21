@@ -10,14 +10,14 @@ RUN apt-get update && \
     apt-get clean autoclean && \
     apt-get autoremove --yes
 
-FROM base AS prime
+FROM base AS pollo
 ARG TAGS
-RUN addgroup --gid 1000 theprimeagen
-RUN adduser --gecos theprimeagen --uid 1000 --gid 1000 --disabled-password theprimeagen
-USER theprimeagen
-WORKDIR /home/theprimeagen
+RUN addgroup --gid 1000 pollo
+RUN adduser --gecos pollo --uid 1000 --gid 1000 --disabled-password pollo
+USER pollo
+WORKDIR /home/pollo
 
-FROM prime
+FROM pollo
 COPY . .
 CMD ["sh", "-c", "ansible-playbook $TAGS local.yml"]
 

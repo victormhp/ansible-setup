@@ -1,0 +1,23 @@
+- name: Required libraries for alacritty
+  apt:
+    name: ["cmake", "pkg-config", "libfreetype6-dev", "libfontconfig1-dev", "libxcb-xfixes0-dev", "libxkbcommon-dev", "python3"]
+  tags:
+    - alacritty
+
+- name: Clone alacritty repo
+  git:
+    repo: https://github.com/alacritty/alacritty.git
+    dest: "{{ lookup('env', 'HOME') }}/alacritty"
+  tags:
+    - alacritty
+
+- name: Build alacritty
+  shell: |
+    export PATH="$HOME/.cargo/bin:$PATH"
+    cd "{{ lookup('env', 'HOME') }}"
+    cd alacritty && cargo build --release
+    cp target/release/alacritty /usr/local/bin
+  args:
+    executable: /bin/zsh
+  tags:
+    - alacritty

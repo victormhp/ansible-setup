@@ -1,7 +1,5 @@
 - hosts: localhost
   vars:
-    source_key: "./.ssh/id_rsa"
-    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
     personal: "{{ lookup('env', 'HOME') }}/personal"
   pre_tasks:
   - name: Update Apt
@@ -13,19 +11,15 @@
     tags:
       - install
       - core
-  tasks:
-    - include: tasks/ssh.yml
-    - include: tasks/git-setup.yml
-    - include: tasks/core-setup.yml
-    - include: tasks/node-setup.yml
-    - include: tasks/npm-packages.yml
-    - include: tasks/zsh-setup.yml
-    - include: tasks/slack-setup.yml
-    - include: tasks/personal-projects.yml
-    - include: tasks/nvim-setup.yml
-    - include: tasks/brave.yml
-    - include: tasks/debugger.yml
-    - include: tasks/dotfiles.yml
-    - include: tasks/productivity-tools.yml
-    - include: tasks/lsp.yml
-
+  - include_tasks: "{{ item }}"
+    with_fileglob:
+      - tasks/git-setup.yml
+      - tasks/core-setup.yml
+      - tasks/cargo.yml
+      - tasks/fonts.yml
+      - tasks/dotfiles.yml
+      - tasks/nvim-setup.yml
+      - tasks/nvim-plugins.yml
+      - tasks/zsh-setup.yml
+      - tasks/alacritty.yml
+      - tasks/lsp.yml
