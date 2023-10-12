@@ -16,8 +16,6 @@
       - tasks/git-setup.yml
       - tasks/core-setup.yml
       - tasks/productivity-tools.yml
-      - tasks/cargo.yml
-      - tasks/alacritty.yml
       - tasks/node.yml
       - tasks/npm-packages.yml
       - tasks/fonts.yml
@@ -26,3 +24,5 @@
       - tasks/nvim-plugins.yml
       - tasks/zsh-setup.yml
       - tasks/lsp.yml
+      - tasks/cargo.yml
+      - tasks/alacritty.yml

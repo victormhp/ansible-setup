@@ -1,15 +1,6 @@
-- name: shutter ppa (ppa:linuxuprising/shutter)
-  apt_repository:
-   repo: ppa:linuxuprising/shutter
-   state: present
-   update_cache: True
-  tags:
-    - install
-    - productivity
-
 - name: Install packages
   apt:
-    name: [ "tmux", "wireshark", "fzf", "kdenlive", "gimp", "xclip", "screenkey", "tldr", "ripgrep", "shutter" ]
+    name: [ "tmux", "wireshark", "fzf", "gimp", "xclip", "tldr", "ripgrep" ]
   tags:
     - install
     - productivity
