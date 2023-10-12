@@ -15,11 +15,14 @@
     with_fileglob:
       - tasks/git-setup.yml
       - tasks/core-setup.yml
+      - tasks/productivity-tools.yml
       - tasks/cargo.yml
+      - tasks/alacritty.yml
+      - tasks/node.yml
+      - tasks/npm-packages.yml
       - tasks/fonts.yml
       - tasks/dotfiles.yml
       - tasks/nvim-setup.yml
       - tasks/nvim-plugins.yml
       - tasks/zsh-setup.yml
-      - tasks/alacritty.yml
       - tasks/lsp.yml
