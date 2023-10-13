@@ -4,6 +4,7 @@
   ignore_errors: yes
 
 - name: Download Installer
+  become: yes
   when: cargo_exists is failed
   get_url:
       url: https://sh.rustup.rs
@@ -14,6 +15,7 @@
       - rust
 
 - name: Install rust/cargo
+  become: yes
   when: cargo_exists is failed
   shell: /tmp/sh.rustup.rs -y
   tags:
