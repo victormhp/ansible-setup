@@ -12,21 +12,23 @@
     - install
     - neovim
 
-- name: Download nvim
-  get_url:
-    url: "https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz"
-    dest: "/usr/local/bin"
+- name: Clone Neovim
+  git:
+    repo: 'https://github.com/neovim/neovim.git'
+    dest: "{{ lookup('env', 'HOME') }}/neovim"
   tags:
     - install
     - neovim
 
-- name: Install nvim
-  become: yes
-  shell: |
-    cd "/usr/local/bin"
-    tar xzvf nvim-linux64.tar.gz
-    rm -rf nvim-linux64.tar.gz
-    ln -s nvim nvim-linux64
+- name: Build neovim
+  shell: "cd {{ lookup('env', 'HOME') }}/neovim && make -j 20"
+  tags:
+    - install
+    - neovim
+
+- name: Install neovim
+  become: true
+  shell: "cd {{ lookup('env', 'HOME') }}/neovim && make install"
   tags:
     - install
     - neovim

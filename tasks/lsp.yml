@@ -2,7 +2,7 @@
   git:
     repo: "https://github.com/LuaLS/lua-language-server.git"
     recursive: yes
-    dest: "{{ personal }}/sumneko"
+    dest: "{{ workspace }}/sumneko"
   tags:
     - install
     - lsp
@@ -10,7 +10,7 @@
 - name: Build the damn sumneko deez lsp
   shell:
     cmd: ./compile/install.sh
-    chdir: "{{ personal }}/sumneko/3rd/luamake"
+    chdir: "{{ workspace }}/sumneko/3rd/luamake"
   tags:
     - install
     - lsp
@@ -18,7 +18,7 @@
 - name: Finish the dude off with the built
   shell:
     cmd: ./3rd/luamake/luamake rebuild
-    chdir: "{{ personal }}/sumneko/"
+    chdir: "{{ workspace }}/sumneko/"
   tags:
     - install
     - lsp

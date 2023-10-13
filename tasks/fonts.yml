@@ -1,16 +1,16 @@
 - name: Ensure fonts directory
   file:
-    path: "{{ lookup('env', 'HOME') }}/.fonts"
+    path: $HOME/.fonts
     state: directory
 
 - name: Jettbrains exists
-  shell: "ls {{ lookup('env', 'HOME') }}/.fonts/Hack*Nerd*Font*Complete*"
+  shell: "ls {{ lookup('env', 'HOME') }}/.fonts/JettMonoNerdFont*"
   register: jettbrains_exists
   ignore_errors: yes
 
 - name: Download Jettbrains
-  when: jettbrains_exists is failed
   ansible.builtin.unarchive:
-    src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Iosevka.zip
-    dest: "{{ lookup('env', 'HOME') }}/.fonts/"
+    src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip
+    dest: "{{ lookup('env', 'HOME') }}/.fonts"
     remote_src: yes
+  when: jettbrains_exists is failed
