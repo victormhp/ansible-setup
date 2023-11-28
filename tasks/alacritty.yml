@@ -12,7 +12,6 @@
     - alacritty
 
 - name: Build alacritty
-  become: true
   shell: |
     export PATH="$HOME/.cargo/bin:$PATH"
     cd "{{ workspace }}/alacritty"
@@ -22,11 +21,14 @@
 
 
 - name: Desktop shortcut alacritty
-  become: true
+  become: yes
   shell: |
-    cp target/release/alacritty /usr/local/bin
-    cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
-    desktop-file-install extra/linux/Alacritty.desktop
+    cp {{ workspace }}/alacritty/target/release/alacritty /usr/local/bin
+    cp {{ workspace }}/alacritty/extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+    desktop-file-install {{ workspace }}/alacritty/extra/linux/Alacritty.desktop
     update-desktop-database
   tags:
     - alacritty
+
+- name: Delete alacritty repo
+  shell: rm -rf {{ workspace }}/alacritty
