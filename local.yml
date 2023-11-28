@@ -18,16 +18,16 @@
   - include_tasks: "{{ item }}"
     with_fileglob:
       - tasks/ssh.yml
-      - tasks/git-setup.yml
       - tasks/core-setup.yml
       - tasks/productivity-tools.yml
-      - tasks/node.yml
+      - tasks/git-setup.yml
+      - tasks/node-setup.yml
       - tasks/npm-packages.yml
       - tasks/fonts.yml
       - tasks/dotfiles.yml
       - tasks/nvim-setup.yml
       - tasks/zsh-setup.yml
-      - tasks/cargo.yml
+      - tasks/cargo-setup.yml
       - tasks/alacritty.yml
       - tasks/brave.yml
       - tasks/lsp.yml
