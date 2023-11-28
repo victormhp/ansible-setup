@@ -1,22 +1,27 @@
 - name: Install ZSH
-  become: true
   apt: name=zsh
   tags: &tags_for_zsh_tasks [ 'install', 'productivity', 'dotfiles', 'zsh' ]
 
 - name: Change shell to zsh
-  become: true
   user:
     name: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh
   tags: *tags_for_zsh_tasks
 
-- name: Install starship
-  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
-  tags: *tags_for_zsh_tasks
+- name: Download antidote
+  git:
+    repo: https://github.com/mattmc3/antidote.git
+    dest: "{{ lookup('env', 'HOME') }}/.antidote"
+    depth: 1
+  tags:
+    - alacritty
 
-- name: Install antidote
+- name: Add antidote commands
   shell: |
-    git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
     echo 'source ${ZDOTDIR:-~}/.antidote/antidote.zsh' >> "{{ lookup('env', 'HOME') }}/.zshrc"
     echo 'antidote load' >> "{{ lookup('env', 'HOME') }}/.zshrc"
+  tags: *tags_for_zsh_tasks
+
+- name: Install starship
+  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
   tags: *tags_for_zsh_tasks
