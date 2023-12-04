@@ -29,5 +29,4 @@
       - tasks/zsh-setup.yml
       - tasks/cargo-setup.yml
       - tasks/alacritty.yml
-      - tasks/brave.yml
       - tasks/lsp.yml
