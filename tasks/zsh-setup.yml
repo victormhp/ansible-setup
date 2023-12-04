@@ -1,8 +1,11 @@
 - name: Install ZSH
-  apt: name=zsh
+  become: yes
+  apt: 
+    name: ["zsh"]
   tags: &tags_for_zsh_tasks [ 'install', 'productivity', 'dotfiles', 'zsh' ]
 
 - name: Change shell to zsh
+  become: yes
   user:
     name: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh

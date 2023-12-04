@@ -1,4 +1,5 @@
 - name: Install pnpm
+  become: yes
   npm:
     name: pnpm
     global: yes
@@ -7,6 +8,7 @@
     - node
 
 - name: Install eslint
+  become: yes
   npm:
     name: eslint
     global: yes
@@ -15,6 +17,7 @@
     - node
 
 - name: Install Typescript server
+  become: yes
   npm:
     name: typescript-language-server
     global: yes
@@ -23,6 +26,7 @@
     - node
 
 - name: Install Typescript
+  become: yes
   npm:
     name: typescript
     global: yes
@@ -31,6 +35,7 @@
     - node
 
 - name: Install TS-Node
+  become: yes
   npm:
     name: ts-node
     global: yes
