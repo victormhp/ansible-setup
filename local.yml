@@ -30,3 +30,4 @@
       - tasks/cargo-setup.yml
       - tasks/alacritty.yml
       - tasks/lsp.yml
+      - tasks/flatpak-setup.yml

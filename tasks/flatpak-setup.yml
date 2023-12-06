@@ -1,0 +1,53 @@
+- name: Install flatpak
+  become: yes
+  apt:
+    name: ["flatpak", "gnome-software-plugin-flatpak"]
+  tags:
+    - flatpak
+
+- name: Add flatpak to software store
+  become: yes
+  shell: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  tags: 
+    - flatpak
+
+- name: Install spotify
+  flatpak:
+    name: com.spotify.Client
+    state: present
+
+- name: Install stremio
+  flatpak:
+    name: com.stremio.Stremio
+    state: present
+
+- name: Install vlc
+  flatpak:
+    name: org.videolan.VLC
+    state: present
+
+- name: Install postman
+  flatpak:
+    name: com.getpostman.postman
+    state: present
+
+- name: Install discord
+  flatpak:
+    name: com.discordapp.Discord
+    state: present
+
+- name: Install telegram
+  flatpak:
+    name: org.telegram.desktop
+    state: present
+
+- name: Install obsidian 
+  flatpak:
+    name: md.obsidian.Obsidian
+    state: present
+
+- name: Install zoom 
+  flatpak:
+    name: us.zoom.Zoom
+    state: present
+
