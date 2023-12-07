@@ -28,7 +28,7 @@
 
 - name: Install postman
   flatpak:
-    name: com.getpostman.postman
+    name: com.getpostman.Postman
     state: present
 
 - name: Install discord
@@ -51,3 +51,7 @@
     name: us.zoom.Zoom
     state: present
 
+- name: Install vscode 
+  flatpak:
+    name: com.visualstudio.code
+    state: present
