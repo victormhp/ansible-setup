@@ -51,7 +51,3 @@
     name: us.zoom.Zoom
     state: present
 
-- name: Install vscode 
-  flatpak:
-    name: com.visualstudio.code
-    state: present
