@@ -22,3 +22,9 @@
   tags:
     - install
     - lsp
+
+- name: Delete sumneko folder
+  file:
+    state: absent
+    path: "{{ workspace }}/sumneko"
+   

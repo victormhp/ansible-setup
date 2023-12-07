@@ -1,9 +1,15 @@
+- name: Check if alacritty already installed
+  stat:
+    path: "/usr/local/bin/alacritty"
+  register: alacritty
+
 - name: Required libraries for alacritty
   become: yes
   apt:
     name: ["cmake", "pkg-config", "libfreetype6-dev", "libfontconfig1-dev", "libxcb-xfixes0-dev", "libxkbcommon-dev", "python3"]
   tags:
     - alacritty
+  when: not alacritty.stat.exists
 
 - name: Download alacritty
   git:
@@ -11,6 +17,7 @@
     dest: "{{ workspace }}/alacritty"
   tags:
     - alacritty
+  when: not alacritty.stat.exists
 
 - name: Build alacritty
   shell: |
@@ -19,6 +26,7 @@
     cargo build --release
   tags:
     - alacritty
+  when: not alacritty.stat.exists
 
 
 - name: Desktop shortcut alacritty
@@ -30,6 +38,10 @@
     update-desktop-database
   tags:
     - alacritty
+  when: not alacritty.stat.exists
 
 - name: Delete alacritty repo
-  shell: rm -rf {{ workspace }}/alacritty
+  file:
+    state: absent
+    path: "{{ workspace }}/alacritty"
+  when: not alacritty.stat.exists
