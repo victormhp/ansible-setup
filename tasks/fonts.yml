@@ -1,13 +1,13 @@
 - name: Ensure fonts directory
   file:
     state: directory
-    path: "{{ lookup('env', 'HOME') }}/.fonts"
+    path: "{{ ansible_env.HOME }}/.fonts"
   tags: 
     - fonts
 
 - name: Check if fonts already installed
   stat:
-    path: "{{ lookup('env', 'HOME') }}/.fonts/JetBrainsMonoNerdFont-Regular.ttf"
+    path: "{{ ansible_env.HOME }}/.fonts/JetBrainsMonoNerdFont-Regular.ttf"
   register: jettbrains
   ignore_errors: yes
   tags: 
@@ -16,7 +16,7 @@
 - name: Download Jettbrains
   ansible.builtin.unarchive:
     src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip
-    dest: "{{ lookup('env', 'HOME') }}/.fonts"
+    dest: "{{ ansible_env.HOME }}/.fonts"
     remote_src: yes
   tags: 
     - fonts

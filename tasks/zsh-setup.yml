@@ -14,15 +14,15 @@
 - name: Download antidote
   git:
     repo: https://github.com/mattmc3/antidote.git
-    dest: "{{ lookup('env', 'HOME') }}/.antidote"
+    dest: "{{ ansible_env.HOME }}/.antidote"
     depth: 1
   tags:
     - alacritty
 
 - name: Add antidote commands
   shell: |
-    echo 'source ${ZDOTDIR:-~}/.antidote/antidote.zsh' >> "{{ lookup('env', 'HOME') }}/.zshrc"
-    echo 'antidote load' >> "{{ lookup('env', 'HOME') }}/.zshrc"
+    echo 'source ${ZDOTDIR:-~}/.antidote/antidote.zsh' >> "{{ ansible_env.HOME }}/.zshrc"
+    echo 'antidote load' >> "{{ ansible_env.HOME }}/.zshrc"
   tags: *tags_for_zsh_tasks
 
 - name: Install starship
