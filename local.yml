@@ -1,7 +1,7 @@
 - hosts: localhost
   vars:
-    workspace: "{{ lookup('env', 'HOME') }}/workspace"
     source_key: "./.ssh/id_rsa"
+    workspace: "{{ lookup('env', 'HOME') }}/workspace"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
   pre_tasks:
   - name: Update Apt
@@ -21,12 +21,11 @@
       - tasks/core-setup.yml
       - tasks/productivity-tools.yml
       - tasks/git-setup.yml
-      - tasks/node-setup.yml
-      - tasks/npm-packages.yml
       - tasks/fonts.yml
       - tasks/dotfiles.yml
       - tasks/nvim-setup.yml
       - tasks/zsh-setup.yml
+      - tasks/nvm-setup.yml
       - tasks/cargo-setup.yml
       - tasks/alacritty.yml
       - tasks/lsp.yml
