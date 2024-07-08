@@ -11,5 +11,7 @@
     nvm install --lts
     nvm use --lts
     npm install -g pnpm
+    npm install -g tsc
+    npm install -g ts-node
   tags:
     - nvm

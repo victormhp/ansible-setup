@@ -51,3 +51,13 @@
     name: us.zoom.Zoom
     state: present
 
+
+- name: Install blender 
+  flatpak:
+    name: org.blender.Blender
+    state: present
+
+- name: Install gwenview 
+  flatpak:
+    name: org.kde.gwenview
+    state: present
