@@ -12,52 +12,68 @@
     - flatpak
 
 - name: Install spotify
+  become: yes
   flatpak:
     name: com.spotify.Client
     state: present
 
 - name: Install stremio
+  become: yes
   flatpak:
     name: com.stremio.Stremio
     state: present
 
 - name: Install vlc
+  become: yes
   flatpak:
     name: org.videolan.VLC
     state: present
 
 - name: Install postman
+  become: yes
   flatpak:
     name: com.getpostman.Postman
     state: present
 
 - name: Install discord
+  become: yes
   flatpak:
     name: com.discordapp.Discord
     state: present
 
-- name: Install telegram
+- name: Install 
+  become: yes
   flatpak:
     name: org.telegram.desktop
     state: present
 
-- name: Install obsidian 
+- name: Install obsidian
+  become: yes
   flatpak:
     name: md.obsidian.Obsidian
     state: present
 
 - name: Install zoom 
+  become: yes
   flatpak:
     name: us.zoom.Zoom
     state: present
 
 
-- name: Install blender 
+- name: Install blender
+  become: yes
   flatpak:
     name: org.blender.Blender
     state: present
 
 - name: Install gwenview 
+  become: yes
   flatpak:
     name: org.kde.gwenview
+    state: present
+
+- name: Install brave 
+  become: yes
+  flatpak:
+    name: com.brave.Browser
     state: present
