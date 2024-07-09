@@ -2,6 +2,7 @@
   become: true
   apt:
     name: ["build-essential", "cmake", "pkg-config", "libpthread-stubs0-dev"]
+  ignore_errors: yes
   tags:
     - install
     - core
@@ -10,6 +11,7 @@
   become: true
   apt:
     name: [ "lua5.1", "unzip", "libtool", "libtool-bin", "gettext"]
+  ignore_errors: yes
   tags:
     - install
     - core
@@ -17,7 +19,8 @@
 - name: Install System Packages 3 (the rest)
   become: true
   apt:
-    name: [ "compton", "polybar", "curl", "htop", "lsof", "i3", "i3status", "ccache", "ninja-build", "python3-pip", "dconf-editor", "pavucontrol", "moreutils", "clangd", "bat", "exa", "rofi", "picom", "nitrogen", "bluez", "bluez-tools", "blueman", "playerctl" ]
+    name: [ "compton", "curl", "htop", "lsof", "i3", "i3status", "ccache", "ninja-build", "python3-pip", "dconf-editor", "pavucontrol", "moreutils", "clangd", "bat", "rofi", "picom", "nitrogen", "bluez", "bluez-tools", "blueman", "playerctl", "polybar", "exa" ]
+  ignore_errors: yes
   tags:
     - install
     - core

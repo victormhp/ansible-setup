@@ -2,6 +2,7 @@
   become: true
   apt:
     name: [ "tmux", "wireshark", "fzf", "gimp", "xclip", "tldr", "ripgrep", "xdotool" ]
+  ignore_errors: yes
   tags:
     - install
     - productivity
