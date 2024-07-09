@@ -72,8 +72,21 @@
     name: org.kde.gwenview
     state: present
 
-- name: Install brave 
+- name: Install steam
   become: yes
   flatpak:
-    name: com.brave.Browser
+    name: com.valvesoftware.Steam
+    state: present
+
+- name: Install document viewer
+  become: yes
+  flatpak:
+    name: org.gnome.Evince
+    state: present
+
+
+- name: Install chrome
+  become: yes
+  flatpak:
+    name: com.google.Chrome
     state: present
