@@ -84,9 +84,14 @@
     name: org.gnome.Evince
     state: present
 
-
 - name: Install chrome
   become: yes
   flatpak:
     name: com.google.Chrome
+    state: present
+
+- name: Install okular
+  become: yes
+  flatpak:
+    name: org.kde.okular
     state: present
