@@ -1,34 +1,53 @@
-- name: Remove neovim
-  shell: rm -rf {{ lookup('env', 'HOME') }}/neovim
-  tags:
-    - install
-    - neovim
+- name: Install Neovim from source
+  block:
+    - name: Install build prerequisites
+      apt:
+        name:
+          - git
+          - ninja-build
+          - gettext
+          - cmake
+          - unzip
+          - curl
+          - build-essential
+        state: present
+      become: yes
 
-- name: Get Packer
-  git:
-    repo: 'https://github.com/wbthomason/packer.nvim'
-    dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/pack/packer/start/packer.nvim"
-  tags:
-    - install
-    - neovim
+    - name: Clone Neovim repository
+      git:
+        repo: 'https://github.com/neovim/neovim'
+        dest: /tmp/neovim
+        version: stable
 
-- name: Clone Neovim
-  git:
-    repo: 'https://github.com/neovim/neovim.git'
-    dest: "{{ ansible_env.HOME }}/neovim"
-  tags:
-    - install
-    - neovim
+    - name: Build Neovim
+      command:
+        cmd: make CMAKE_BUILD_TYPE=RelWithDebInfo
+        chdir: /tmp/neovim
+      register: build_result
 
-- name: Build neovim
-  shell: "cd {{ ansible_env.HOME }}/neovim && make -j 20"
-  tags:
-    - install
-    - neovim
+    - name: Create DEB package
+      command:
+        cmd: cpack -G DEB
+        chdir: /tmp/neovim/build
+      when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
-- name: Install neovim
-  become: true
-  shell: "cd {{ ansible_env.HOME }}/neovim && make install"
-  tags:
-    - install
-    - neovim
+    - name: Install Neovim DEB package
+      apt:
+        deb: /tmp/neovim/build/nvim-linux64.deb
+      become: yes
+      when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+
+    - name: Install Neovim (non-Debian systems)
+      command:
+        cmd: make install
+        chdir: /tmp/neovim
+      become: yes
+      when: ansible_distribution != 'Ubuntu' and ansible_distribution != 'Debian'
+
+  always:
+    - name: Clean up Neovim source
+      file:
+        path: /tmp/neovim
+        state: absent
+
+  ignore_errors: yes
