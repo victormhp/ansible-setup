@@ -59,7 +59,6 @@
     name: us.zoom.Zoom
     state: present
 
-
 - name: Install blender
   become: yes
   flatpak:
@@ -90,8 +89,20 @@
     name: com.google.Chrome
     state: present
 
+- name: Install zen
+  become: yes
+  flatpak:
+    name: io.github.zen_browser.zen
+    state: present
+
 - name: Install okular
   become: yes
   flatpak:
     name: org.kde.okular
+    state: present
+
+- name: Install keepass
+  become: yes
+  flatpak:
+    name: org.keepassxc.KeePassXC
     state: present
