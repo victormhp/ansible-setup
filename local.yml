@@ -25,7 +25,7 @@
       - tasks/dotfiles.yml
       - tasks/nvim-setup.yml
       - tasks/zsh-setup.yml
-      - tasks/nvm-setup.yml
+      - tasks/fnm-setup.yml
       - tasks/cargo-setup.yml
       - tasks/alacritty.yml
       - tasks/lsp.yml

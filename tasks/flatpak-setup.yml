@@ -89,12 +89,6 @@
     name: com.google.Chrome
     state: present
 
-- name: Install zen
-  become: yes
-  flatpak:
-    name: io.github.zen_browser.zen
-    state: present
-
 - name: Install okular
   become: yes
   flatpak:
