@@ -20,7 +20,7 @@ Install ansible.
 ./install
 ```
 
-Run ansible playbook.
+Run ansible playbook, amen.
 
 ```sh
 ansible-playbook local.yml --ask-become-pass --ask-vault-pass
