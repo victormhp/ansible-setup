@@ -1,0 +1,33 @@
+- name: Check if .dotfiles are already cloned
+  stat:
+    path: "{{ ansible_env.HOME }}/.dotfiles"
+  register: dotfiles_dir
+
+- name: Cloning dotfiles
+  git:
+    repo: "https://github.com/victormhp/.dotfiles.git"
+    dest: "{{ ansible_env.HOME }}/.dotfiles"
+    recursive: yes
+    update: yes
+    accept_hostkey: yes
+    version: main
+  tags:
+    - install
+    - dotfiles
+  when: not dotfiles_dir.stat.exists
+
+- name: Install dotfiles
+  shell: cd {{ ansible_env.HOME }}/.dotfiles && ./install.sh
+  tags:
+    - install
+    - dotfiles
+  when: not dotfiles_dir.stat.exists
+
+- name: Install dotfiles
+  git:
+    repo: "https://github.com/tmux-plugins/tpm"
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
+  tags:
+    - install
+    - dotfiles
+  when: not dotfiles_dir.stat.exists

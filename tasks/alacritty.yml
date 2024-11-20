@@ -1,0 +1,60 @@
+- name: Install Alacritty
+  block:
+    - name: Check if Alacritty is already installed
+      stat:
+        path: "/usr/local/bin/alacritty"
+      register: alacritty_installed
+
+    - name: Install required libraries for Alacritty
+      become: yes
+      apt:
+        name: 
+          - cmake
+          - pkg-config
+          - libfreetype6-dev
+          - libfontconfig1-dev
+          - libxcb-xfixes0-dev
+          - libxkbcommon-dev
+          - python3
+          - cargo
+        state: present
+      when: not alacritty_installed.stat.exists
+
+    - name: Clone Alacritty repository
+      git:
+        repo: https://github.com/alacritty/alacritty.git
+        dest: "/tmp/alacritty"
+        version: master
+      when: not alacritty_installed.stat.exists
+
+    - name: Build Alacritty
+      command:
+        cmd: cargo build --release
+        chdir: "/tmp/alacritty"
+      environment:
+        PATH: "{{ ansible_env.HOME }}/.cargo/bin:{{ ansible_env.PATH }}"
+      when: not alacritty_installed.stat.exists
+
+    - name: Install Alacritty
+      become: yes
+      command:
+        cmd: "{{ alacritty_install_cmd }}"
+        chdir: "/tmp/alacritty"
+      loop:
+        - cp target/release/alacritty /usr/local/bin
+        - cp extra/logo/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+        - desktop-file-install extra/linux/Alacritty.desktop
+        - update-desktop-database
+      loop_control:
+        loop_var: alacritty_install_cmd
+      when: not alacritty_installed.stat.exists
+
+  always:
+    - name: Clean up Alacritty source
+      file:
+        state: absent
+        path: "/tmp/alacritty"
+      when: not alacritty_installed.stat.exists
+
+  tags:
+    - alacritty
