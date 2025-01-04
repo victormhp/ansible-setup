@@ -19,7 +19,7 @@
 - name: Install System Packages 3 (the rest)
   become: true
   apt:
-    name: [ "compton", "curl", "htop", "lsof", "i3", "i3status", "ccache", "ninja-build", "python3-pip", "dconf-editor", "pavucontrol", "moreutils", "clangd", "bat", "rofi", "picom", "nitrogen", "bluez", "bluez-tools", "blueman", "playerctl", "polybar", "exa" ]
+    name: [ "compton", "curl", "htop", "lsof", "i3", "i3status", "ccache", "ninja-build", "python3-pip", "dconf-editor", "pavucontrol", "moreutils", "clangd", "bat", "rofi", "picom", "nitrogen", "bluez", "bluez-tools", "blueman", "playerctl", "polybar", "exa", "tcpdump", "setxkbmap", "nala" ]
   ignore_errors: yes
   tags:
     - install
