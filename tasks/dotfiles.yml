@@ -22,12 +22,3 @@
     - install
     - dotfiles
   when: not dotfiles_dir.stat.exists
-
-- name: Install dotfiles
-  git:
-    repo: "https://github.com/tmux-plugins/tpm"
-    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
-  tags:
-    - install
-    - dotfiles
-  when: not dotfiles_dir.stat.exists

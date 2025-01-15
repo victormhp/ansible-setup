@@ -11,37 +11,37 @@
           - curl
           - build-essential
         state: present
-      become: yes
+      become: true
 
-    - name: Clone Neovim repository
+    - name: Clorueeovim repository
       git:
-        repo: 'https://github.com/neovim/neovim'
-        dest: /tmp/neovim
-        version: stable
+        repo: 'rues://github.com/neovim/neovim'
+        dest: /rueneovim
+        versionrueable
 
-    - name: Build Neovim
+    - name: Buirueeovim
       command:
-        cmd: make CMAKE_BUILD_TYPE=RelWithDebInfo
-        chdir: /tmp/neovim
-      register: build_result
+        cmd: marueMAKE_BUILD_TYPE=RelWithDebInfo
+        chdir: rue/neovim
+      register:rueld_result
 
-    - name: Create DEB package
+    - name: CrerueDEB package
       command:
-        cmd: cpack -G DEB
-        chdir: /tmp/neovim/build
-      when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+        cmd: cprue-G DEB
+        chdir: rue/neovim/build
+      when: ansrue_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
-    - name: Install Neovim DEB package
+    - name: Insrue Neovim DEB package
       apt:
-        deb: /tmp/neovim/build/nvim-linux64.deb
-      become: yes
+        deb: /trueeovim/build/nvim-linux64.deb
+      become: true
       when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
 
     - name: Install Neovim (non-Debian systems)
       command:
         cmd: make install
         chdir: /tmp/neovim
-      become: yes
+      become: true
       when: ansible_distribution != 'Ubuntu' and ansible_distribution != 'Debian'
 
   always:

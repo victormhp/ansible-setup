@@ -1,72 +1,72 @@
 - name: Install flatpak
-  become: yes
+  become: true
   apt:
     name: ["flatpak", "gnome-software-plugin-flatpak"]
   tags:
     - flatpak
 
 - name: Add flatpak to software store
-  become: yes
+  become: true
   shell: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
   tags: 
     - flatpak
 
 - name: Install spotify
-  become: yes
+  become: true
   flatpak:
     name: com.spotify.Client
     state: present
 
 - name: Install stremio
-  become: yes
+  become: true
   flatpak:
     name: com.stremio.Stremio
     state: present
 
 - name: Install postman
-  become: yes
+  become: true
   flatpak:
     name: com.getpostman.Postman
     state: present
 
 - name: Install discord
-  become: yes
+  become: true
   flatpak:
     name: com.discordapp.Discord
     state: present
 
 - name: Install telegram
-  become: yes
+  become: true
   flatpak:
     name: org.telegram.desktop
     state: present
 
 - name: Install obsidian
-  become: yes
+  become: true
   flatpak:
     name: md.obsidian.Obsidian
     state: present
 
 - name: Install zoom 
-  become: yes
+  become: true
   flatpak:
     name: us.zoom.Zoom
     state: present
 
 - name: Install steam
-  become: yes
+  become: true
   flatpak:
     name: com.valvesoftware.Steam
     state: present
 
 - name: Install okular
-  become: yes
+  become: true
   flatpak:
     name: org.kde.okular
     state: present
 
 - name: Install keepass
-  become: yes
+  become: true
   flatpak:
     name: org.keepassxc.KeePassXC
     state: present

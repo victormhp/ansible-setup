@@ -6,7 +6,7 @@
       register: ghostty_installed
 
     - name: Install required libraries for Ghostty
-      become: yes
+      become: true
       apt:
         name: 
           -libgtk-4-dev 

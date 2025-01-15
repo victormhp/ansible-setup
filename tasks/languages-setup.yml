@@ -65,7 +65,7 @@
       when: not zig_installed.stat.exists
 
     - name: Change zig folder name
-      become: yes
+      become: true
       shell: mv /usr/local/zig-linux-x86_64-{{zig_version}} /usr/local/zig
       when: not zig_installed.stat.exists
 

@@ -30,4 +30,4 @@
       - tasks/languages-setup.yml
       - tasks/ghostty.yml
       - tasks/fnm-setup.yml
-      - tasks/flatpak-setup.yml
+      - tasks/flatpak.yml
