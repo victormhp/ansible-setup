@@ -23,12 +23,6 @@
     name: com.stremio.Stremio
     state: present
 
-- name: Install vlc
-  become: yes
-  flatpak:
-    name: org.videolan.VLC
-    state: present
-
 - name: Install postman
   become: yes
   flatpak:
@@ -41,7 +35,7 @@
     name: com.discordapp.Discord
     state: present
 
-- name: Install 
+- name: Install telegram
   become: yes
   flatpak:
     name: org.telegram.desktop
@@ -59,34 +53,10 @@
     name: us.zoom.Zoom
     state: present
 
-- name: Install blender
-  become: yes
-  flatpak:
-    name: org.blender.Blender
-    state: present
-
-- name: Install gwenview 
-  become: yes
-  flatpak:
-    name: org.kde.gwenview
-    state: present
-
 - name: Install steam
   become: yes
   flatpak:
     name: com.valvesoftware.Steam
-    state: present
-
-- name: Install document viewer
-  become: yes
-  flatpak:
-    name: org.gnome.Evince
-    state: present
-
-- name: Install chrome
-  become: yes
-  flatpak:
-    name: com.google.Chrome
     state: present
 
 - name: Install okular
