@@ -1,8 +1,8 @@
 - hosts: localhost
   vars:
     source_key: "./.ssh/id_rsa"
-    workspace: "{{ lookup('env', 'HOME') }}/workspace"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
+    workspace: "{{ lookup('env', 'HOME') }}/workspace"
   pre_tasks:
   - name: Update Apt
     become: true
