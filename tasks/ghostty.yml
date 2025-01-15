@@ -23,7 +23,7 @@
 
     - name: Build Ghostty
       command:
-        cmd: zig build -p {{ ansible_env.HOME }}/.local -Doptimize=ReleaseFast
+        cmd: /usr/local/zig/zig build -p {{ ansible_env.HOME }}/.local -Doptimize=ReleaseFast
         chdir: "/tmp/ghostty"
       when: not ghostty_installed.stat.exists
 
