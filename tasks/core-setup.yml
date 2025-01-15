@@ -26,6 +26,7 @@
       - ccache
       - ninja-build
       - python3-pip
+      - python3-venv
       - dconf-editor
       - moreutils
       - clangd
