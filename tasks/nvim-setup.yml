@@ -1,5 +1,10 @@
 - name: Install Neovim from source
   block:
+    - name: Check if Neovim is already installed
+      stat:
+        path: "/opt/nvim-linux64"
+      register: nvim_installed
+
     - name: Install build prerequisites
       apt:
         name:
@@ -12,43 +17,36 @@
           - build-essential
         state: present
       become: true
+      when: not nvim_installed.stat.exists
 
-    - name: Clone Neovim repository
-      git:
-        repo: 'https://github.com/neovim/neovim'
-        dest: /tmp/neovim
-        version: stable
+    - name: Download Neovim 
+      get_url:
+        url: "https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz"
+        dest: "/tmp/nvim-linux64.tar.gz"
+      when: not nvim_installed.stat.exists
 
-    - name: Build Neovim
-      command:
-        cmd: make CMAKE_BUILD_TYPE=RelWithDebInfo
-        chdir: /tmp/neovim
-      register: build_result
-
-    - name: Create DEB package
-      command:
-        cmd: cpack -G DEB
-        chdir: /tmp/neovim/build
-      when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
-
-    - name: Install Neovim DEB package
-      apt:
-        deb: /tmp/neovim/build/nvim-linux64.deb
+    - name: Extract Neovim binary to /opt
+      unarchive:
+        src: "/tmp/nvim-linux64.tar.gz"
+        dest: "/opt/"
+        remote_src: yes
       become: true
-      when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+      when: not nvim_installed.stat.exists
 
-    - name: Install Neovim (non-Debian systems)
-      command:
-        cmd: make install
-        chdir: /tmp/neovim
-      become: true
-      when: ansible_distribution != 'Ubuntu' and ansible_distribution != 'Debian'
+    - name: Add to .bashrc
+      lineinfile:
+        path: "{{ ansible_user_dir }}/.bashrc"
+        line: 'export PATH="$PATH:/opt/nvim-linux64/bin"'
+        create: yes
+        state: present
+      when: not nvim_installed.stat.exists
 
   always:
     - name: Clean up Neovim source
       file:
-        path: /tmp/neovim
+        path: /tmp/nvim-linux64.tar.gz
         state: absent
+      when: not nvim_installed.stat.exists
 
   ignore_errors: yes
 
