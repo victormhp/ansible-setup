@@ -1,5 +1,7 @@
 - hosts: localhost
   vars:
+    go_version: "1.23.4"
+    zig_version: "0.13.0"
     source_key: "./.ssh/id_rsa"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
     workspace: "{{ lookup('env', 'HOME') }}/workspace"
@@ -26,6 +28,8 @@
       - tasks/nvim-setup.yml
       - tasks/zsh-setup.yml
       - tasks/tmux-setup.yml
+      - tasks/go-setup.yml
+      - tasks/zig-setup.yml
       - tasks/fnm-setup.yml
       - tasks/cargo-setup.yml
       - tasks/alacritty.yml
