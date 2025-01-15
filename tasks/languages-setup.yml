@@ -1,3 +1,44 @@
+- name: Go Setup
+  block:
+    - name: Check if Go is already installed
+      stat:
+        path: "/usr/local/go/bin/go"
+      register: go_installed
+
+    - name: Download Go tar file
+      command: wget https://go.dev/dl/go{{go_version}}.linux-amd64.tar.gz
+      when: not go_installed.stat.exists
+
+    - name: Delete previous installation
+      command: rm -rf /usr/local/go
+      become: true
+      when: not go_installed.stat.exists
+
+    - name: Extract and move new Go folder to /usr/local
+      command: tar -C /usr/local -xzf go{{go_version}}.linux-amd64.tar.gz
+      become: true
+      when: not go_installed.stat.exists
+
+    - name: Delete downloaded tar file
+      shell: rm -rf go{{go_version}}.linux-amd64.tar.gz*
+      when: not go_installed.stat.exists
+
+    - name: Add Go binary path to ~/.bashrc
+      lineinfile:
+        path: "{{ ansible_env.HOME }}/.bashrc"
+        line: 'export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin'
+        create: true
+        state: present
+      when: not go_installed.stat.exists
+
+    - name: Add Go binary path to ~/.zshrc
+      lineinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        line: 'export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin'
+        create: true
+        state: present
+      when: not go_installed.stat.exists
+
 - name: Zig Setup
   block:
     - name: Check if Zig is already installed
@@ -43,4 +84,3 @@
         create: true
         state: present
       when: not zig_installed.stat.exists
-

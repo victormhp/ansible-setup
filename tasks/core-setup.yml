@@ -10,26 +10,11 @@
   tags:
     - packages
 
-
-- name: Install window manager utilities and applications
-  become: true
-  apt:
-    name:
-      - i3
-      - i3status
-      - polybar
-      - rofi
-      - picom
-      - nitrogen
-      - compton
-  ignore_errors: yes
-  tags:
-    - packages
-
 - name: Install system utilities and applications
   become: true
   apt:
     name:
+      - git
       - lua5.1
       - unzip
       - libtool
@@ -45,7 +30,7 @@
       - moreutils
       - clangd
       - bluez
-      - bluez-tools
+      - bluez-toolscore
       - blueman
       - wireless-tools
       - tcpdump
@@ -76,3 +61,17 @@
   tags:
     - packages
 
+- name: Install window manager utilities and applications
+  become: true
+  apt:
+    name:
+      - i3
+      - i3status
+      - polybar
+      - rofi
+      - nitrogen
+      - picom
+      - compton
+  ignore_errors: yes
+  tags:
+    - packages
