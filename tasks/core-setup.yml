@@ -1,7 +1,7 @@
-- name: Install System Packages 1 (build-essential, cmake, pkg-config, pthread)
+- name: Install System Packages 1 (build-essential, wireless-tools, cmake, pkg-config, pthread)
   become: true
   apt:
-    name: ["build-essential", "cmake", "pkg-config", "libpthread-stubs0-dev"]
+    name: ["build-essential", "wireless-tools", "cmake", "pkg-config", "libpthread-stubs0-dev"]
   ignore_errors: yes
   tags:
     - install
