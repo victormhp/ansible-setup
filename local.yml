@@ -21,7 +21,6 @@
     with_fileglob:
       - tasks/ssh.yml
       - tasks/core-setup.yml
-      - tasks/productivity-tools.yml
       - tasks/git-setup.yml
       - tasks/fonts.yml
       - tasks/dotfiles.yml

@@ -1,8 +1,0 @@
-- name: Install packages
-  become: true
-  apt:
-    name: [ "tmux", "wireshark", "fzf", "gimp", "xclip", "tldr", "ripgrep", "xdotool", "maim" ]
-  ignore_errors: yes
-  tags:
-    - install
-    - productivity

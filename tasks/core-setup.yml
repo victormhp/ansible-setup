@@ -1,27 +1,78 @@
-- name: Install System Packages 1 (build-essential, wireless-tools, cmake, pkg-config, pthread)
+- name: Install essential system packages
   become: true
   apt:
-    name: ["build-essential", "wireless-tools", "cmake", "pkg-config", "libpthread-stubs0-dev"]
+    name:
+      - build-essential
+      - cmake
+      - pkg-config
+      - libpthread-stubs0-dev
   ignore_errors: yes
   tags:
-    - install
-    - core
+    - packages
 
-- name: Install System Packages 2 (lua, unzip, libtool, libtool-bin, gettext)
-  become: true
-  apt:
-    name: [ "lua5.1", "unzip", "libtool", "libtool-bin", "gettext"]
-  ignore_errors: yes
-  tags:
-    - install
-    - core
 
-- name: Install System Packages 3 (the rest)
+- name: Install window manager utilities and applications
   become: true
   apt:
-    name: [ "compton", "curl", "htop", "lsof", "i3", "i3status", "ccache", "ninja-build", "python3-pip", "dconf-editor", "pavucontrol", "moreutils", "clangd", "bat", "rofi", "picom", "nitrogen", "bluez", "bluez-tools", "blueman", "playerctl", "polybar", "exa", "tcpdump", "setxkbmap", "nala" ]
+    name:
+      - i3
+      - i3status
+      - polybar
+      - rofi
+      - picom
+      - nitrogen
+      - compton
   ignore_errors: yes
   tags:
-    - install
-    - core
+    - packages
+
+- name: Install system utilities and applications
+  become: true
+  apt:
+    name:
+      - lua5.1
+      - unzip
+      - libtool
+      - libtool-bin
+      - gettext
+      - curl
+      - htop
+      - lsof
+      - ccache
+      - ninja-build
+      - python3-pip
+      - dconf-editor
+      - moreutils
+      - clangd
+      - bluez
+      - bluez-tools
+      - blueman
+      - wireless-tools
+      - tcpdump
+      - pavucontrol
+      - playerctl
+      - exa
+      - bat
+      - nala
+      - setxkbmap
+  ignore_errors: yes
+  tags:
+    - packages
+
+- name: Install productivity and utility tools
+  become: true
+  apt:
+    name:
+      - tmux
+      - wireshark
+      - fzf
+      - gimp
+      - xclip
+      - tldr
+      - ripgrep
+      - xdotool
+      - maim
+  ignore_errors: yes
+  tags:
+    - packages
 
