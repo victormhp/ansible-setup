@@ -34,7 +34,3 @@
         state: absent
         path: "/tmp/ghostty"
       when: not ghostty_installed.stat.exists
-
-  tags:
-    - alacritty
-
