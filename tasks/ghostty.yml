@@ -9,9 +9,9 @@
       become: true
       apt:
         name: 
-          -libgtk-4-dev 
-          -libadwaita-1-dev 
-          -git
+          - libgtk-4-dev 
+          - libadwaita-1-dev 
+          - git
         state: present
       when: not ghostty_installed.stat.exists
 
@@ -19,7 +19,6 @@
       git:
         repo: https://github.com/ghostty-org/ghostty.git
         dest: "/tmp/ghostty"
-        version: main
       when: not ghostty_installed.stat.exists
 
     - name: Build Ghostty
