@@ -30,7 +30,7 @@
       - moreutils
       - clangd
       - bluez
-      - bluez-toolscore
+      # - bluez-toolscore
       - blueman
       - wireless-tools
       - tcpdump
@@ -39,7 +39,7 @@
       - exa
       - bat
       - nala
-      - setxkbmap
+       #- setxkbmap
   ignore_errors: yes
   tags:
     - packages

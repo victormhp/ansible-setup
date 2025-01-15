@@ -28,6 +28,6 @@
       - tasks/zsh-setup.yml
       - tasks/tmux-setup.yml
       - tasks/languages-setup.yml
-      - tasks/ghostty.yml
       - tasks/fnm-setup.yml
+      - tasks/ghostty.yml
       - tasks/flatpak.yml

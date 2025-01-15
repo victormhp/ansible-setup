@@ -53,12 +53,6 @@
     name: us.zoom.Zoom
     state: present
 
-- name: Install steam
-  become: true
-  flatpak:
-    name: com.valvesoftware.Steam
-    state: present
-
 - name: Install okular
   become: true
   flatpak:
