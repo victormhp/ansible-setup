@@ -9,11 +9,6 @@
       command: wget https://go.dev/dl/go{{go_version}}.linux-amd64.tar.gz
       when: not go_installed.stat.exists
 
-    - name: Delete previous installation
-      command: rm -rf /usr/local/go
-      become: true
-      when: not go_installed.stat.exists
-
     - name: Extract and move new Go folder to /usr/local
       command: tar -C /usr/local -xzf go{{go_version}}.linux-amd64.tar.gz
       become: true
@@ -21,22 +16,6 @@
 
     - name: Delete downloaded tar file
       shell: rm -rf go{{go_version}}.linux-amd64.tar.gz*
-      when: not go_installed.stat.exists
-
-    - name: Add Go binary path to ~/.bashrc
-      lineinfile:
-        path: "{{ ansible_env.HOME }}/.bashrc"
-        line: 'export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin'
-        create: true
-        state: present
-      when: not go_installed.stat.exists
-
-    - name: Add Go binary path to ~/.zshrc
-      lineinfile:
-        path: "{{ ansible_env.HOME }}/.zshrc"
-        line: 'export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin'
-        create: true
-        state: present
       when: not go_installed.stat.exists
 
 - name: Zig Setup
@@ -48,11 +27,6 @@
 
     - name: Download Zig tar file
       command: wget https://ziglang.org/download/0.13.0/zig-linux-x86_64-{{zig_version}}.tar.xz
-      when: not zig_installed.stat.exists
-
-    - name: Delete previous installation
-      command: rm -rf /usr/local/zig
-      become: true
       when: not zig_installed.stat.exists
 
     - name: Extract and move new Zig folder to /usr/local
@@ -67,20 +41,4 @@
     - name: Change zig folder name
       become: true
       shell: mv /usr/local/zig-linux-x86_64-{{zig_version}} /usr/local/zig
-      when: not zig_installed.stat.exists
-
-    - name: Add Zig binary path to ~/.bashrc
-      lineinfile:
-        path: "{{ ansible_env.HOME }}/.bashrc"
-        line: 'export PATH=$PATH:/usr/local/zig:$ZIGPATH/bin'
-        create: true
-        state: present
-      when: not zig_installed.stat.exists
-
-    - name: Add Zig binary path to ~/.zshrc
-      lineinfile:
-        path: "{{ ansible_env.HOME }}/.zshrc"
-        line: 'export PATH=$PATH:/usr/local/zig:$ZIGPATH/bin'
-        create: true
-        state: present
       when: not zig_installed.stat.exists
