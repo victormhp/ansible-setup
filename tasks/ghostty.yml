@@ -1,0 +1,40 @@
+- name: Install Ghostty
+  block:
+    - name: Check if Ghostty is already installed
+      stat:
+        path: "/usr/local/bin/ghostty"
+      register: ghostty_installed
+
+    - name: Install required libraries for Ghostty
+      become: yes
+      apt:
+        name: 
+          -libgtk-4-dev 
+          -libadwaita-1-dev 
+          -git
+        state: present
+      when: not ghostty_installed.stat.exists
+
+    - name: Clone Ghostty repository
+      git:
+        repo: https://github.com/ghostty-org/ghostty.git
+        dest: "/tmp/ghostty"
+        version: main
+      when: not ghostty_installed.stat.exists
+
+    - name: Build Ghostty
+      command:
+        cmd: zig build -p {{ ansible_env.HOME }}/.local -Doptimize=ReleaseFast
+        chdir: "/tmp/ghostty"
+      when: not ghostty_installed.stat.exists
+
+  always:
+    - name: Clean up Ghostty source
+      file:
+        state: absent
+        path: "/tmp/ghostty"
+      when: not ghostty_installed.stat.exists
+
+  tags:
+    - alacritty
+
