@@ -15,7 +15,7 @@
 
 - name: Download Jettbrains
   ansible.builtin.unarchive:
-    src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip
+    src: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip
     dest: "{{ ansible_env.HOME }}/.fonts"
     remote_src: yes
   tags: 
