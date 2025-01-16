@@ -68,7 +68,6 @@
     name:
       - i3
       - i3status
-      - polybar
       - rofi
       - nitrogen
       - picom
