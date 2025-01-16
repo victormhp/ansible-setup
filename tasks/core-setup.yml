@@ -70,7 +70,6 @@
       - i3status
       - rofi
       - nitrogen
-      - picom
       - compton
   ignore_errors: yes
   tags:
