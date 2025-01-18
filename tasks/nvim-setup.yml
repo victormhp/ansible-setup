@@ -7,23 +7,23 @@
       ignore_errors: true
       changed_when: false
 
-    - name: Install build prerequisites
-      apt:
-        name:
-          - git
-          - ninja-build
-          - gettext
-          - cmake
-          - unzip
-          - curl
-          - build-essential
-        state: present
-      become: true
-      when: nvim_check is failed
 
     - name: Download and install Neovim
       when: nvim_check is failed
       block:
+        - name: Install build prerequisites
+          apt:
+            name:
+              - git
+              - ninja-build
+              - gettext
+              - cmake
+              - unzip
+              - curl
+              - build-essential
+            state: present
+          become: true
+
         - name: Download Neovim 
           get_url:
             url: "https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz"
