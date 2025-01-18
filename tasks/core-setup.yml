@@ -1,4 +1,7 @@
 - name: Install essential system packages
+  tags: 
+  - packages
+  - essential
   become: true
   apt:
     name:
@@ -7,10 +10,11 @@
       - pkg-config
       - libpthread-stubs0-dev
   ignore_errors: yes
-  tags:
-    - packages
 
 - name: Install system utilities and applications
+  tags: 
+    - packages
+    - utilities
   become: true
   apt:
     name:
@@ -42,10 +46,11 @@
       - nala
        #- setxkbmap
   ignore_errors: yes
-  tags:
-    - packages
 
 - name: Install productivity and utility tools
+  tags: 
+    - packages
+    - productivity
   become: true
   apt:
     name:
@@ -59,10 +64,11 @@
       - xdotool
       - maim
   ignore_errors: yes
-  tags:
-    - packages
 
 - name: Install window manager utilities and applications
+  tags: 
+    - packages
+    - wm
   become: true
   apt:
     name:
@@ -72,5 +78,3 @@
       - nitrogen
       - compton
   ignore_errors: yes
-  tags:
-    - packages

@@ -1,66 +1,65 @@
-- name: Install flatpak
-  become: true
-  apt:
-    name: ["flatpak", "gnome-software-plugin-flatpak"]
-  tags:
-    - flatpak
+- name: Flatpak setup
+  tags: flatpak
+  block:
+    - name: Install flatpak
+      become: true
+      apt:
+        name: ["flatpak", "gnome-software-plugin-flatpak"]
 
-- name: Add flatpak to software store
-  become: true
-  shell: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-  tags: 
-    - flatpak
+    - name: Add flatpak to software store
+      become: true
+      shell: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
-- name: Install spotify
-  become: true
-  flatpak:
-    name: com.spotify.Client
-    state: present
+    - name: Install spotify
+      become: true
+      flatpak:
+        name: com.spotify.Client
+        state: present
 
-- name: Install stremio
-  become: true
-  flatpak:
-    name: com.stremio.Stremio
-    state: present
+    - name: Install stremio
+      become: true
+      flatpak:
+        name: com.stremio.Stremio
+        state: present
 
-- name: Install postman
-  become: true
-  flatpak:
-    name: com.getpostman.Postman
-    state: present
+    - name: Install postman
+      become: true
+      flatpak:
+        name: com.getpostman.Postman
+        state: present
 
-- name: Install discord
-  become: true
-  flatpak:
-    name: com.discordapp.Discord
-    state: present
+    - name: Install discord
+      become: true
+      flatpak:
+        name: com.discordapp.Discord
+        state: present
 
-- name: Install telegram
-  become: true
-  flatpak:
-    name: org.telegram.desktop
-    state: present
+    - name: Install telegram
+      become: true
+      flatpak:
+        name: org.telegram.desktop
+        state: present
 
-- name: Install obsidian
-  become: true
-  flatpak:
-    name: md.obsidian.Obsidian
-    state: present
+    - name: Install obsidian
+      become: true
+      flatpak:
+        name: md.obsidian.Obsidian
+        state: present
 
-- name: Install zoom 
-  become: true
-  flatpak:
-    name: us.zoom.Zoom
-    state: present
+    - name: Install zoom 
+      become: true
+      flatpak:
+        name: us.zoom.Zoom
+        state: present
 
-- name: Install okular
-  become: true
-  flatpak:
-    name: org.kde.okular
-    state: present
+    - name: Install okular
+      become: true
+      flatpak:
+        name: org.kde.okular
+        state: present
 
-- name: Install keepass
-  become: true
-  flatpak:
-    name: org.keepassxc.KeePassXC
-    state: present
+    - name: Install keepass
+      become: true
+      flatpak:
+        name: org.keepassxc.KeePassXC
+        state: present

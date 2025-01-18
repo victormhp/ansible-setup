@@ -1,4 +1,5 @@
 - name: Install Ghostty
+  tags: ghostty
   block:
     - name: Check if Ghostty is already installed
       stat:

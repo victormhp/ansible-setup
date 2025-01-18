@@ -1,4 +1,5 @@
 - name: Go Setup
+  tags: golang
   block:
     - name: Check if Go is already installed
       stat:
@@ -21,6 +22,7 @@
       when: not go_installed.stat.exists
 
 - name: Zig Setup
+  tags: ziglang
   block:
     - name: Check if Zig is already installed
       stat:

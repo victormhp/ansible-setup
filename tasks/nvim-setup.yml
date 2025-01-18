@@ -1,4 +1,5 @@
-- name: Install Neovim from source
+- name: Neovim setup
+  tags: nvim
   block:
     - name: Check if Neovim is already installed
       stat:

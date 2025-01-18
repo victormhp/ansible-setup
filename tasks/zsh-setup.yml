@@ -1,40 +1,38 @@
-- name: Check if ZSH is installed
-  stat:
-    path: /usr/bin/zsh
-  register: zsh_installed
+- name: Zsh setup
+  tags: zsh
+  block:
+    - name: Check if ZSH is installed
+      stat:
+        path: /usr/bin/zsh
+      register: zsh_installed
 
-- name: Install ZSH
-  become: true
-  apt:
-    name: ["zsh"]
-    state: present
-  when: not zsh_installed.stat.exists
-  tags: &tags_for_zsh_tasks [ 'install', 'productivity', 'dotfiles', 'zsh' ]
+    - name: Install ZSH
+      become: true
+      apt:
+        name: ["zsh"]
+        state: present
+      when: not zsh_installed.stat.exists
 
-- name: Change shell to zsh
-  become: true
-  user:
-    name: "{{ ansible_user_id }}"
-    shell: /usr/bin/zsh
-  when: not zsh_installed.stat.exists
-  tags: *tags_for_zsh_tasks
+    - name: Change shell to zsh
+      become: true
+      user:
+        name: "{{ ansible_user_id }}"
+        shell: /usr/bin/zsh
+      when: not zsh_installed.stat.exists
 
-- name: Download antidote
-  git:
-    repo: https://github.com/mattmc3/antidote.git
-    dest: "{{ ansible_env.HOME }}/.antidote"
-    depth: 1
-  when: not zsh_installed.stat.exists
-  tags: *tags_for_zsh_tasks
+    - name: Download antidote
+      git:
+        repo: https://github.com/mattmc3/antidote.git
+        dest: "{{ ansible_env.HOME }}/.antidote"
+        depth: 1
+      when: not zsh_installed.stat.exists
 
-- name: Add antidote commands
-  shell: |
-    echo 'source ${ZDOTDIR:-~}/.antidote/antidote.zsh' >> "{{ ansible_env.HOME }}/.zshrc"
-    echo 'antidote load' >> "{{ ansible_env.HOME }}/.zshrc"
-  when: not zsh_installed.stat.exists
-  tags: *tags_for_zsh_tasks
+    - name: Add antidote commands
+      shell: |
+        echo 'source ${ZDOTDIR:-~}/.antidote/antidote.zsh' >> "{{ ansible_env.HOME }}/.zshrc"
+        echo 'antidote load' >> "{{ ansible_env.HOME }}/.zshrc"
+      when: not zsh_installed.stat.exists
 
-- name: Install starship
-  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
-  when: not zsh_installed.stat.exists
-  tags: *tags_for_zsh_tasks
+    - name: Install starship
+      shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+      when: not zsh_installed.stat.exists
