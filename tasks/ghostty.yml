@@ -1,36 +1,53 @@
 - name: Install Ghostty
   tags: ghostty
   block:
-    - name: Check if Ghostty is already installed
-      stat:
-        path: "/usr/local/bin/ghostty"
-      register: ghostty_installed
+    - name: Check if Ghostty is installed
+      command: which ghostty
+      register: ghostty_check
+      ignore_errors: true
+      changed_when: false
+      
+    - name: Check if Zig is installed
+      command: which zig
+      register: zig_installed
+      ignore_errors: true
+      changed_when: false
+      when: ghostty_check is failed
 
-    - name: Install required libraries for Ghostty
-      become: true
-      apt:
-        name: 
-          - libgtk-4-dev 
-          - libadwaita-1-dev 
-          - git
-        state: present
-      when: not ghostty_installed.stat.exists
+    - name: Fail if Zig is not installed
+      fail:
+        msg: "Zig is required to build Ghostty but was not found. Please install Zig first."
+      when: ghostty_check is failed
 
-    - name: Clone Ghostty repository
-      git:
-        repo: https://github.com/ghostty-org/ghostty.git
-        dest: "/tmp/ghostty"
-      when: not ghostty_installed.stat.exists
+    - name: Download and install ghostty
+      when: ghostty_check is failed
+      block:
+        - name: Install required libraries for Ghostty
+          become: true
+          apt:
+            name: 
+              - libgtk-4-dev 
+              - libadwaita-1-dev 
+              - git
+            state: present
+            update_cache: yes
 
-    - name: Build Ghostty
-      command:
-        cmd: /usr/local/zig/zig build -p {{ ansible_env.HOME }}/.local -Doptimize=ReleaseFast
-        chdir: "/tmp/ghostty"
-      when: not ghostty_installed.stat.exists
+        - name: Clone Ghostty repository
+          git:
+            repo: https://github.com/ghostty-org/ghostty.git
+            dest: "/tmp/ghostty"
+            force: yes
+            depth: 1
+
+        - name: Build Ghostty
+          command:
+            cmd: /usr/local/zig/zig build -p {{ ansible_env.HOME }}/.local -Doptimize=ReleaseFast
+            chdir: "/tmp/ghostty"
+          when: ghostty_check is failed
 
   always:
     - name: Clean up Ghostty source
       file:
         state: absent
         path: "/tmp/ghostty"
-      when: not ghostty_installed.stat.exists
+      when: ghostty_check is failed

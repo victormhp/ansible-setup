@@ -6,25 +6,18 @@
     dest_key: "{{ ansible_env.HOME }}/.ssh/id_rsa"
     workspace: "{{ ansible_env.HOME }}/workspace"
   pre_tasks:
-  - name: Update Apt
-    become: true
-    apt:
-      force_apt_get: true
-      update_cache: true
-      state: present
-    tags:
-      - install
-      - core
+    - name: Update Apt
+      become: true
+      apt:
+        force_apt_get: true
+        update_cache: true
+        state: present
+      tags:
+        - install
+        - core
   tasks:
-  - include_tasks: "{{ item }}"
-    with_fileglob:
-      - tasks/ssh.yml
-      - tasks/core-setup.yml
-      - tasks/git-setup.yml
-      - tasks/dotfiles.yml
-      - tasks/nvim-setup.yml
-      - tasks/zsh-setup.yml
-      - tasks/languages-setup.yml
-      - tasks/fnm-setup.yml
-      - tasks/ghostty.yml
-      - tasks/flatpak.yml
+    - include_tasks: "{{ item }}"
+      with_fileglob:
+        - "tasks/*.yml"
+      tags:
+        - always

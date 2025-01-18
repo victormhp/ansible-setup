@@ -1,6 +1,6 @@
 - name: Install essential system packages
   tags: 
-  - packages
+  - install
   - essential
   become: true
   apt:
@@ -13,7 +13,7 @@
 
 - name: Install system utilities and applications
   tags: 
-    - packages
+    - install
     - utilities
   become: true
   apt:
@@ -49,7 +49,7 @@
 
 - name: Install productivity and utility tools
   tags: 
-    - packages
+    - install
     - productivity
   become: true
   apt:
@@ -67,7 +67,7 @@
 
 - name: Install window manager utilities and applications
   tags: 
-    - packages
+    - install
     - wm
   become: true
   apt:

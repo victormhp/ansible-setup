@@ -1,0 +1,13 @@
+- name: Node setup
+  tags: node
+  block:
+    - name: Check fnm installation
+      command: which fnm
+      register: fnm_installed
+      ignore_errors: true
+      changed_when: false
+
+    - name: Install fnm
+      shell: >
+        curl -fsSL https://fnm.vercel.app/install | bash
+      when: fnm_installed is failed

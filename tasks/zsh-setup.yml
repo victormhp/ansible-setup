@@ -1,5 +1,6 @@
 - name: Zsh setup
-  tags: zsh
+  tags: 
+    - zsh
   block:
     - name: Check if ZSH is installed
       stat:

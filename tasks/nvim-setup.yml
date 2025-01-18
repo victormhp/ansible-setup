@@ -2,9 +2,10 @@
   tags: nvim
   block:
     - name: Check if Neovim is already installed
-      stat:
-        path: "/opt/nvim-linux64"
-      register: nvim_installed
+      command: which nvim
+      register: nvim_check
+      ignore_errors: true
+      changed_when: false
 
     - name: Install build prerequisites
       apt:
@@ -18,29 +19,31 @@
           - build-essential
         state: present
       become: true
-      when: not nvim_installed.stat.exists
+      when: nvim_check is failed
 
-    - name: Download Neovim 
-      get_url:
-        url: "https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz"
-        dest: "/tmp/nvim-linux64.tar.gz"
-      when: not nvim_installed.stat.exists
+    - name: Download and install Neovim
+      when: nvim_check is failed
+      block:
+        - name: Download Neovim 
+          get_url:
+            url: "https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz"
+            dest: "/tmp/nvim-linux64.tar.gz"
 
-    - name: Extract Neovim binary to /opt
-      unarchive:
-        src: "/tmp/nvim-linux64.tar.gz"
-        dest: "/opt/"
-        remote_src: yes
-      become: true
-      when: not nvim_installed.stat.exists
+        - name: Extract Neovim binary to /opt
+          unarchive:
+            src: "/tmp/nvim-linux64.tar.gz"
+            dest: "/usr/local"
+            remote_src: yes
+          become: true
 
-    - name: Add to .bashrc
-      lineinfile:
-        path: "{{ ansible_user_dir }}/.bashrc"
-        line: 'export PATH="$PATH:/opt/nvim-linux64/bin"'
-        create: yes
-        state: present
-      when: not nvim_installed.stat.exists
+        - name: Change nvim folder name
+          become: true
+          shell: mv /usr/local/nvim-linux64 /usr/local/nvim
+
+        - name: Add to PATH
+          lineinfile:
+            path: "{{ ansible_env.HOME }}/.zshrc"
+            line: 'export PATH=$PATH:/usr/local/nvim/bin'
 
   always:
     - name: Clean up Neovim source

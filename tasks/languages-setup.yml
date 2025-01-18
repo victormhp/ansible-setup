@@ -1,50 +1,75 @@
 - name: Go Setup
-  tags: golang
+  tags: go
   block:
     - name: Check if Go is already installed
-      stat:
-        path: "/usr/local/go/bin/go"
-      register: go_installed
+      command: which go
+      register: go_check
+      ignore_errors: true
+      changed_when: false
 
-    - name: Download Go tar file
-      command: wget https://go.dev/dl/go{{go_version}}.linux-amd64.tar.gz
-      when: not go_installed.stat.exists
+    - name: Download and install Go
+      when: go_check is failed
+      block:
+        - name: Download Go
+          get_url:
+            url: "https://go.dev/dl/go{{ go_version }}.linux-amd64.tar.gz"
+            dest: "/tmp/go{{ go_version }}.tar.gz"
 
-    - name: Extract and move new Go folder to /usr/local
-      command: tar -C /usr/local -xzf go{{go_version}}.linux-amd64.tar.gz
-      become: true
-      when: not go_installed.stat.exists
+        - name: Extract Go
+          become: true
+          unarchive:
+            src: "/tmp/go{{ go_version }}.tar.gz"
+            dest: /usr/local
+            remote_src: yes
 
-    - name: Delete downloaded tar file
+        - name: Add to PATH
+          lineinfile:
+            path: "{{ ansible_env.HOME }}/.zshrc"
+            line: 'export PATH=$PATH:/usr/local/go/bin'
+
+  always:
+    - name: Cleanup
       file:
+        path: "/tmp/go{{ go_version }}.tar.gz"
         state: absent
-        path: "go{{go_version}}.linux-amd64.tar.gz"
-      when: not go_installed.stat.exists
+      when: go_check is failed
 
 - name: Zig Setup
-  tags: ziglang
+  tags: zig
   block:
     - name: Check if Zig is already installed
-      stat:
-        path: "/usr/local/zig/zig"
-      register: zig_installed
+      command: which zig
+      register: zig_check
+      ignore_errors: true
+      changed_when: false
 
     - name: Download Zig tar file
-      command: wget https://ziglang.org/download/0.13.0/zig-linux-x86_64-{{zig_version}}.tar.xz
-      when: not zig_installed.stat.exists
+      when: zig_check is failed
+      block: 
+        - name: Download Zig
+          get_url:
+            url: "https://ziglang.org/download/0.13.0/zig-linux-x86_64-{{zig_version}}.tar.xz"
+            dest: "/tmp/zig-linux-x86_64-{{ zig_version }}.tar.xz"
 
-    - name: Extract and move new Zig folder to /usr/local
-      command: tar -C /usr/local -xvf zig-linux-x86_64-{{zig_version}}.tar.xz
-      become: true
-      when: not zig_installed.stat.exists
+        - name: Extract Zig
+          become: true
+          unarchive:
+            src: "/tmp/zig-linux-x86_64-{{ zig_version }}.tar.xz"
+            dest: /usr/local
+            remote_src: yes
 
-    - name: Delete downloaded tar file
+        - name: Change zig folder name
+          become: true
+          shell: mv /usr/local/zig-linux-x86_64-{{zig_version}} /usr/local/zig
+
+        - name: Add to PATH
+          lineinfile:
+            path: "{{ ansible_env.HOME }}/.zshrc"
+            line: 'export PATH=$PATH:/usr/local/zig/'
+
+  always:
+    - name: Cleanup
       file:
+        path: "/tmp/zig-linux-x86_64-{{ zig_version }}.tar.xz"
         state: absent
-        path: "zig-linux-x86_64-{{zig_version}}.tar.xz"
-      when: not zig_installed.stat.exists
-
-    - name: Change zig folder name
-      become: true
-      shell: mv /usr/local/zig-linux-x86_64-{{zig_version}} /usr/local/zig
-      when: not zig_installed.stat.exists
+      when: zig_check is failed
