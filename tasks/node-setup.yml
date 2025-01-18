@@ -3,11 +3,23 @@
   block:
     - name: Check fnm installation
       command: which fnm
-      register: fnm_installed
+      register: fnm_check
       ignore_errors: true
       changed_when: false
 
-    - name: Install fnm
-      shell: >
-        curl -fsSL https://fnm.vercel.app/install | bash
-      when: fnm_installed is failed
+    - name: Download and install fnm, node and pnpm
+      when: fnm_check is failed
+      block:
+        - name: Install fnm
+          shell: >
+            curl -fsSL https://fnm.vercel.app/install | bash
+
+        - name: Install NodeJS LTS
+          shell: |
+            export PATH="{{ ansible_env.HOME }}/.local/share/fnm:$PATH"
+            fnm install --lts
+
+        - name: Enable pnpm via corepack
+          shell: |
+            corepack enable
+            corepack prepare pnpm@latest --activate
