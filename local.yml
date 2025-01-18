@@ -22,7 +22,6 @@
       - tasks/ssh.yml
       - tasks/core-setup.yml
       - tasks/git-setup.yml
-      - tasks/fonts.yml
       - tasks/dotfiles.yml
       - tasks/nvim-setup.yml
       - tasks/zsh-setup.yml
