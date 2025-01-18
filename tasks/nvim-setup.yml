@@ -1,7 +1,7 @@
 - name: Neovim setup
   tags: nvim
   block:
-    - name: Check if Neovim is already installed
+    - name: Check if Neovim is installed
       command: which nvim
       register: nvim_check
       ignore_errors: true
