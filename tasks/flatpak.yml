@@ -1,65 +1,38 @@
 - name: Flatpak setup
   tags: flatpak
   block:
-    - name: Install flatpak
-      become: true
-      apt:
-        name: ["flatpak", "gnome-software-plugin-flatpak"]
+    - name: Check if Flatpak is installed
+      command: which flatpak
+      register: flatpak_check
+      ignore_errors: true
+      changed_when: false
 
-    - name: Add flatpak to software store
-      become: true
-      shell: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    - name: Install and configure Flatpak
+      when: flatpak_check is failed
+      block:
+        - name: Install flatpak
+          become: true
+          apt:
+            name: 
+              - flatpak
+              - gnome-software-plugin-flatpak
 
-    - name: Install spotify
-      become: true
-      flatpak:
-        name: com.spotify.Client
-        state: present
+        - name: Add Flatpak to software store
+          become: true
+          shell: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
-    - name: Install stremio
-      become: true
-      flatpak:
-        name: com.stremio.Stremio
-        state: present
-
-    - name: Install postman
-      become: true
-      flatpak:
-        name: com.getpostman.Postman
-        state: present
-
-    - name: Install discord
-      become: true
-      flatpak:
-        name: com.discordapp.Discord
-        state: present
-
-    - name: Install telegram
-      become: true
-      flatpak:
-        name: org.telegram.desktop
-        state: present
-
-    - name: Install obsidian
-      become: true
-      flatpak:
-        name: md.obsidian.Obsidian
-        state: present
-
-    - name: Install zoom 
-      become: true
-      flatpak:
-        name: us.zoom.Zoom
-        state: present
-
-    - name: Install okular
-      become: true
-      flatpak:
-        name: org.kde.okular
-        state: present
-
-    - name: Install keepass
-      become: true
-      flatpak:
-        name: org.keepassxc.KeePassXC
-        state: present
+        - name: Install apps
+          become: true
+          loop:
+            - com.spotify.Client
+            - com.stremio.Stremio
+            - com.getpostman.Postman
+            - com.discordapp.Discord
+            - org.telegram.desktop
+            - md.obsidian.Obsidian
+            - us.zoom.Zoom
+            - org.kde.okular
+            - org.keepassxc.KeePassXC
+          flatpak:
+            name: "{{ item }}"
+            state: present
