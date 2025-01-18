@@ -2,12 +2,13 @@
   tags: zsh
   block:
     - name: Check if ZSH is installed
-      stat:
-        path: /usr/bin/zsh
-      register: zsh_installed
+      command: which zsh
+      register: zsh_check
+      ignore_errors: true
+      changed_when: false
 
-      name: Download and install zsh
-      when: not zsh_installed.stat.exists
+    - name: Download and install zsh
+      when: zsh_check is failed
       block:
         - name: Install ZSH
           become: true

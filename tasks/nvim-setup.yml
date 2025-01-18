@@ -7,7 +7,6 @@
       ignore_errors: true
       changed_when: false
 
-
     - name: Download and install Neovim
       when: nvim_check is failed
       block:
