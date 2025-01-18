@@ -15,7 +15,6 @@
     tags:
       - install
       - core
-
   tasks:
   - include_tasks: "{{ item }}"
     with_fileglob:
@@ -25,7 +24,6 @@
       - tasks/dotfiles.yml
       - tasks/nvim-setup.yml
       - tasks/zsh-setup.yml
-      - tasks/tmux-setup.yml
       - tasks/languages-setup.yml
       - tasks/fnm-setup.yml
       - tasks/ghostty.yml
