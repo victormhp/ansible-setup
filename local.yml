@@ -4,7 +4,6 @@
     zig_version: "0.13.0"
     source_key: "./.ssh/id_rsa"
     dest_key: "{{ ansible_env.HOME }}/.ssh/id_rsa"
-    workspace: "{{ ansible_env.HOME }}/workspace"
   pre_tasks:
     - name: Update Apt
       become: true
