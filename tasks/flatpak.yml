@@ -32,6 +32,7 @@
             - md.obsidian.Obsidian
             - us.zoom.Zoom
             - org.kde.okular
+            - org.kde.gwenview
             - org.keepassxc.KeePassXC
           flatpak:
             name: "{{ item }}"
