@@ -24,16 +24,14 @@
         - name: Install apps
           become: true
           loop:
+            - com.google.Chrome
             - com.spotify.Client
             - com.stremio.Stremio
-            - com.getpostman.Postman
             - com.discordapp.Discord
             - org.telegram.desktop
+            - org.keepassxc.KeePassXC
             - md.obsidian.Obsidian
             - us.zoom.Zoom
-            - org.kde.okular
-            - org.kde.gwenview
-            - org.keepassxc.KeePassXC
           flatpak:
             name: "{{ item }}"
             state: present

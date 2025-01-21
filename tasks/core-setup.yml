@@ -58,6 +58,8 @@
       - wireshark
       - fzf
       - gimp
+      - gwenview
+      - okular
       - xclip
       - tldr
       - ripgrep
