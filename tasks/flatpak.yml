@@ -24,6 +24,7 @@
         - name: Install apps
           become: true
           loop:
+            - app.zen_browser.zen
             - com.google.Chrome
             - com.spotify.Client
             - com.stremio.Stremio
