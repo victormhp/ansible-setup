@@ -1,0 +1,45 @@
+- name: Install QEMU and Virtual Machine Manager
+  tags: vm
+  become: yes
+  block:
+    - name: Install required packages
+      apt:
+        name:
+          - qemu-kvm
+          - qemu-system
+          - qemu-utils
+          - python3
+          - python3-pip
+          - libvirt-clients
+          - libvirt-daemon-system
+          - bridge-utils
+          - virtinst
+          - libvirt-daemon
+          - virt-manager
+        state: present
+        update_cache: yes
+
+    - name: Ensure libvirtd service is started and enabled
+      systemd:
+        name: libvirtd
+        state: started
+        enabled: yes
+
+    - name: Start the default network
+      command: virsh net-start default
+      when: "'default' not in virsh_net_list.stdout"
+
+    - name: Set default network to autostart
+      command: virsh net-autostart default
+      when: "'default' not in virsh_net_list.stdout"
+
+    - name: Check the status of networks
+      command: virsh net-list --all
+      register: virsh_net_list
+      changed_when: false
+
+    - name: Add user to libvirt group
+      user:
+        name: "{{ ansible_user }}"
+        groups: libvirt,libvirt-qemu,kvm,input,disk
+        append: yes
