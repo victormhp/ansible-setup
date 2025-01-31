@@ -1,37 +1,28 @@
 - name: Zsh setup
   tags: zsh
   block:
-    - name: Check if ZSH is installed
-      command: which zsh
-      register: zsh_check
-      ignore_errors: true
-      changed_when: false
+    - name: Install ZSH
+      become: true
+      apt:
+        name: ["zsh"]
+        state: present
 
-    - name: Download and install zsh
-      when: zsh_check is failed
-      block:
-        - name: Install ZSH
-          become: true
-          apt:
-            name: ["zsh"]
-            state: present
+    - name: Change shell to zsh
+      become: true
+      user:
+        name: "{{ ansible_user_id }}"
+        shell: /usr/bin/zsh
 
-        - name: Change shell to zsh
-          become: true
-          user:
-            name: "{{ ansible_user_id }}"
-            shell: /usr/bin/zsh
+    - name: Download antidote
+      git:
+        repo: https://github.com/mattmc3/antidote.git
+        dest: "{{ ansible_env.HOME }}/.antidote"
+        depth: 1
 
-        - name: Download antidote
-          git:
-            repo: https://github.com/mattmc3/antidote.git
-            dest: "{{ ansible_env.HOME }}/.antidote"
-            depth: 1
+    - name: Add antidote commands
+      shell: |
+        echo 'source ${ZDOTDIR:-~}/.antidote/antidote.zsh' >> "{{ ansible_env.HOME }}/.zshrc"
+        echo 'antidote load' >> "{{ ansible_env.HOME }}/.zshrc"
 
-        - name: Add antidote commands
-          shell: |
-            echo 'source ${ZDOTDIR:-~}/.antidote/antidote.zsh' >> "{{ ansible_env.HOME }}/.zshrc"
-            echo 'antidote load' >> "{{ ansible_env.HOME }}/.zshrc"
-
-        - name: Install starship
-          shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+    - name: Install starship
+      shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
