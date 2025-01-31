@@ -22,7 +22,7 @@
         - "tasks/git-setup.yml"
         - "tasks/dotfiles.yml"
         - "tasks/nvim-setup.yml"
-        - "tasks/zsh.yml"
+        - "tasks/zsh-setup.yml"
         - "tasks/languages-setup.yml"
         - "tasks/node-setup.yml"
         - "tasks/ghostty.yml"
