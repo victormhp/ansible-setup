@@ -25,7 +25,7 @@
 
         - name: Download Neovim 
           get_url:
-            url: "https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz"
+            url: "https://github.com/neovim/neovim/releases/download/v0.10.4/nvim-linux-x86_64.tar.gz"
             dest: "/tmp/nvim-linux64.tar.gz"
 
         - name: Extract Neovim binary to /opt
