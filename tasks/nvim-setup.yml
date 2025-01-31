@@ -26,18 +26,18 @@
         - name: Download Neovim 
           get_url:
             url: "https://github.com/neovim/neovim/releases/download/v0.10.4/nvim-linux-x86_64.tar.gz"
-            dest: "/tmp/nvim-linux64.tar.gz"
+            dest: "/tmp/nvim-linux_x86-64.tar.gz"
 
-        - name: Extract Neovim binary to /opt
+        - name: Extract Neovim binary to /usr/local
           unarchive:
-            src: "/tmp/nvim-linux64.tar.gz"
+            src: "/tmp/nvim-linux-x86_64.tar.gz"
             dest: "/usr/local"
             remote_src: yes
           become: true
 
         - name: Change nvim folder name
           become: true
-          shell: mv /usr/local/nvim-linux64 /usr/local/nvim
+          shell: mv /usr/local/nvim-linux-x86_64 /usr/local/nvim
 
         - name: Add to PATH
           lineinfile:
@@ -47,9 +47,8 @@
   always:
     - name: Clean up Neovim source
       file:
-        path: /tmp/nvim-linux64.tar.gz
+        path: /tmp/nvim-linux-x86_64.tar.gz
         state: absent
-      when: not nvim_installed.stat.exists
-
+      when: nvim_check is failed
   ignore_errors: yes
 
