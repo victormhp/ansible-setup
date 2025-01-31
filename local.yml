@@ -16,7 +16,17 @@
         - core
   tasks:
     - include_tasks: "{{ item }}"
-      with_fileglob:
-        - "tasks/*.yml"
+      loop:
+        - "tasks/ssh.yml"
+        - "tasks/core-setup.yml"
+        - "tasks/git-setup.yml"
+        - "tasks/dotfiles.yml"
+        - "tasks/nvim-setup.yml"
+        - "tasks/zsh.yml"
+        - "tasks/languages-setup.yml"
+        - "tasks/node-setup.yml"
+        - "tasks/ghostty.yml"
+        - "tasks/flatpak.yml"
+        - "tasks/vm.yml"
       tags:
         - always
