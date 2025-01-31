@@ -23,3 +23,19 @@
           shell: |
             corepack enable
             corepack prepare pnpm@latest --activate
+
+- name: Deno setup
+  tags: deno
+  block:
+    - name: Check Deno installation
+      command: which deno
+      register: deno_check
+      ignore_errors: true
+      changed_when: false
+
+    - name: Download and install Deno
+      when: deno_check is failed
+      block:
+        - name: Install Deno
+          shell: >
+            curl -fsSL https://deno.land/install.sh | sh
