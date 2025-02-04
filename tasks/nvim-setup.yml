@@ -26,7 +26,7 @@
         - name: Download Neovim 
           get_url:
             url: "https://github.com/neovim/neovim/releases/download/v0.10.4/nvim-linux-x86_64.tar.gz"
-            dest: "/tmp/nvim-linux_x86-64.tar.gz"
+            dest: "/tmp/nvim-linux-x86_64.tar.gz"
 
         - name: Extract Neovim binary to /usr/local
           unarchive:

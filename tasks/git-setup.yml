@@ -56,6 +56,6 @@
   always:
     - name: Cleanup temporary files
       file:
-        path: "/tmp/lazygit"
+        path: "/tmp/lazygit.tar.gz"
         state: absent
       when: lazygit_check is failed

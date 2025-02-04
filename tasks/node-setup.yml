@@ -19,11 +19,6 @@
             export PATH="{{ ansible_env.HOME }}/.local/share/fnm:$PATH"
             fnm install --lts
 
-        - name: Enable pnpm via corepack
-          shell: |
-            corepack enable
-            corepack prepare pnpm@latest --activate
-
 - name: Deno setup
   tags: deno
   block:

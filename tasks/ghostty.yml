@@ -7,18 +7,6 @@
       ignore_errors: true
       changed_when: false
       
-    - name: Check if Zig is installed
-      command: which zig
-      register: zig_check
-      ignore_errors: true
-      changed_when: false
-      when: ghostty_check is failed
-
-    - name: Fail if Zig is not installed
-      fail:
-        msg: "Zig is required to build Ghostty but was not found. Please install Zig first."
-      when: zig_check is failed
-
     - name: Download and install ghostty
       when: ghostty_check is failed
       block:
