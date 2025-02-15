@@ -1,7 +1,5 @@
 - hosts: localhost
   vars:
-    go_version: "1.24.0"
-    zig_version: "0.13.0"
     source_key: "./.ssh/id_rsa"
     dest_key: "{{ ansible_env.HOME }}/.ssh/id_rsa"
   pre_tasks:
@@ -20,13 +18,10 @@
         - "tasks/ssh.yml"
         - "tasks/core-setup.yml"
         - "tasks/git-setup.yml"
+        - "tasks/brew-setup.yml"
         - "tasks/dotfiles.yml"
-        - "tasks/nvim-setup.yml"
         - "tasks/zsh-setup.yml"
-        - "tasks/languages-setup.yml"
-        - "tasks/node-setup.yml"
         - "tasks/ghostty.yml"
         - "tasks/flatpak.yml"
-        - "tasks/vm.yml"
       tags:
         - always

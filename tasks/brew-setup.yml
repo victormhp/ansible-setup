@@ -1,0 +1,77 @@
+- name: Homebrew setup
+  tags: brew
+  block:
+    - name: Check if Homebrew is already installed
+      command: which brew
+      register: brew_check
+      ignore_errors: true
+      changed_when: false
+
+    - name: Install Homebrew
+      become: yes
+      when: brew_check is failed
+      block:
+        - name: Install required dependencies
+          apt:
+            name:
+              - curl
+              - file
+              - git
+              - procps
+              - build-essential
+            state: present
+
+        - name: Download Homebrew installer
+          get_url:
+            url: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+            dest: /tmp/homebrew_installer.sh
+            mode: '0755'
+
+        - name: Run Homebrew installer
+          shell: |
+            NONINTERACTIVE=1 /bin/bash /tmp/homebrew_installer.sh
+          args:
+            creates: "/home/linuxbrew/.linuxbrew/bin/brew"
+
+        - name: Add Homebrew to PATH in .bashrc
+          lineinfile:
+            dest: "~/.bashrc"
+            line: 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'
+            state: present
+
+        - name: Clean up installer
+          file:
+            path: /tmp/homebrew_installer.sh
+            state: absent
+
+        - name: Test Homebrew installation
+          command: "/home/linuxbrew/.linuxbrew/bin/brew --version"
+          register: brew_version
+          changed_when: false
+
+        - name: Display Homebrew version
+          debug:
+            var: brew_version.stdout
+
+    - name: Install packages with Homebrew
+      vars:
+        homebrew_packages:
+          - lazygit
+          - fastfetch
+          - nvim
+          - go
+          - zig
+      block:
+        - name: Set Homebrew environment
+          shell: |
+            eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          args:
+            executable: /bin/bash
+
+        - name: Install brew packages
+          environment:
+            PATH: "/home/linuxbrew/.linuxbrew/bin:{{ ansible_env.PATH }}"
+          homebrew:
+            name: "{{ item }}"
+            state: present
+          loop: "{{ homebrew_packages }}"

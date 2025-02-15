@@ -29,7 +29,7 @@
 
         - name: Build Ghostty
           command:
-            cmd: /usr/local/zig/zig build -p {{ ansible_env.HOME }}/.local -Doptimize=ReleaseFast
+            cmd: /home/linuxbrew/.linuxbrew/bin/zig build -p {{ ansible_env.HOME }}/.local -Doptimize=ReleaseFast
             chdir: "/tmp/ghostty"
           when: ghostty_check is failed
 

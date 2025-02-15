@@ -1,61 +1,20 @@
 - name: Git personal setup email
+  tags: git
   git_config:
     name: user.email
     scope: global
     value: "victoralbertomhp@gmail.com"
-  tags:
-  - git-personal
 
 - name: Git personal setup name
+  tags: git
   git_config:
     name: user.name
     scope: global
     value: "victormhp"
-  tags:
-  - git-personal
 
-- name: Lazygit Setup
-  tags: lazygit
-  block:
-    - name: Check if Lazygit is already installed
-      command: which lazygit
-      register: lazygit_check
-      ignore_errors: true
-      changed_when: false
-
-    - name: Install lazygit
-      when: lazygit_check is failed
-      block:
-        - name: Get latest lazygit version
-          shell: > 
-            curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": *"v\K[^"]*'
-          register: lazygit_version
-          changed_when: false
-
-        - name: Download lazygit
-          get_url:
-            url: "https://github.com/jesseduffield/lazygit/releases/download/v{{ lazygit_version.stdout }}/lazygit_{{ lazygit_version.stdout }}_Linux_x86_64.tar.gz"
-            dest: "/tmp/lazygit.tar.gz"
-            mode: '0644'
-
-        - name: Extract lazygit
-          become: true
-          unarchive:
-            src: "/tmp/lazygit.tar.gz"
-            dest: "/tmp"
-            remote_src: yes
-
-        - name: Install lazygit binary
-          become: true
-          copy:
-            src: "/tmp/lazygit"
-            dest: /usr/local/bin/
-            mode: '0755'
-            remote_src: yes
-
-  always:
-    - name: Cleanup temporary files
-      file:
-        path: "/tmp/lazygit.tar.gz"
-        state: absent
-      when: lazygit_check is failed
+- name: Set default Git branch to main
+  tags: git
+  git_config:
+    name: init.defaultBranch
+    scope: global
+    value: "main"
