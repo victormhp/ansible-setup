@@ -61,6 +61,10 @@
           - nvim
           - go
           - zig
+          - uv
+          - fnm
+          - deno
+          - oven-sh/bun/bun
       block:
         - name: Set Homebrew environment
           shell: |
