@@ -8,7 +8,6 @@
       changed_when: false
 
     - name: Install Homebrew
-      become: yes
       when: brew_check is failed
       block:
         - name: Install required dependencies
@@ -22,6 +21,7 @@
             state: present
 
         - name: Download Homebrew installer
+          become: true
           get_url:
             url: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
             dest: /tmp/homebrew_installer.sh
@@ -40,6 +40,7 @@
             state: present
 
         - name: Clean up installer
+          become: true
           file:
             path: /tmp/homebrew_installer.sh
             state: absent

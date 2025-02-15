@@ -76,6 +76,7 @@
   become: true
   apt:
     name:
+      - i3
       - i3status
       - rofi
       - nitrogen
