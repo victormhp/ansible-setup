@@ -8,10 +8,10 @@
       changed_when: false
       
     - name: Download and install ghostty
+      become: true
       when: ghostty_check is failed
       block:
         - name: Install required libraries for Ghostty
-          become: true
           apt:
             name: 
               - libgtk-4-dev 

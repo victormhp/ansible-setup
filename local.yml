@@ -21,7 +21,7 @@
         - "tasks/brew-setup.yml"
         - "tasks/dotfiles.yml"
         - "tasks/zsh-setup.yml"
-        - "tasks/ghostty.yml"
         - "tasks/flatpak.yml"
+        - "tasks/ghostty.yml"
       tags:
         - always
