@@ -37,13 +37,13 @@
       - moreutils
       - clangd
       - bluez
+      - brightnessctl
       # - bluez-toolscore
       - blueman
       - wireless-tools
       - tcpdump
       - pavucontrol
       - playerctl
-      - exa
       - bat
       - nala
        #- setxkbmap
