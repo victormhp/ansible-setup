@@ -57,6 +57,7 @@
           - nvim
           - direnv
           - just
+          - opencode
       block:
         - name: Install brew packages
           environment:
