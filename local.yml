@@ -19,6 +19,7 @@
         - "tasks/core-setup.yml"
         - "tasks/git-setup.yml"
         - "tasks/brew-setup.yml"
+        - "tasks/devbox.yml"
         - "tasks/dotfiles.yml"
         - "tasks/zsh-setup.yml"
         - "tasks/flatpak.yml"

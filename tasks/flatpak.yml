@@ -27,11 +27,8 @@
             - com.spotify.Client
             - com.stremio.Stremio
             - com.discordapp.Discord
-            - org.telegram.desktop
             - org.keepassxc.KeePassXC
             - org.nomacs.ImageLounge
-            - md.obsidian.Obsidian
-            - us.zoom.Zoom
           flatpak:
             name: "{{ item }}"
             state: present

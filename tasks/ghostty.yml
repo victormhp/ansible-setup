@@ -1,41 +1,93 @@
-- name: Install Ghostty
+- name: Install Ghostty AppImage
   tags: ghostty
+  vars:
+    ghostty_appimage_version: "1.4.0"
+    ghostty_appimage_checksums:
+      x86_64: "50ad4f8b54a01e7d41426e7d12ffae9c88aa1c516ac140755e2bca596e1d2ae6"
+      aarch64: "932e21c671c215e6140633027acb4e8705cef3377d335202211c32d88b5bf506"
+    ghostty_appimage_path: "{{ ansible_env.HOME }}/.local/share/ghostty/Ghostty.AppImage"
   block:
-    - name: Check if Ghostty is installed
-      command: which ghostty
-      register: ghostty_check
-      ignore_errors: true
-      changed_when: false
-      
-    - name: Download and install ghostty
-      become: true
-      when: ghostty_check is failed
-      block:
-        - name: Install required libraries for Ghostty
-          apt:
-            name: 
-              - libgtk-4-dev 
-              - libadwaita-1-dev 
-              - git
-            state: present
-            update_cache: yes
+    - name: Check Ghostty AppImage platform support
+      assert:
+        that:
+          - ansible_system == 'Linux'
+          - ansible_architecture in ghostty_appimage_checksums
+        fail_msg: "Ghostty AppImage supports Linux x86_64 and aarch64."
 
-        - name: Clone Ghostty repository
-          git:
-            repo: https://github.com/ghostty-org/ghostty.git
-            dest: "/tmp/ghostty"
-            force: yes
-            depth: 1
-
-        - name: Build Ghostty
-          command:
-            cmd: /home/linuxbrew/.linuxbrew/bin/zig build -p {{ ansible_env.HOME }}/.local -Doptimize=ReleaseFast
-            chdir: "/tmp/ghostty"
-          when: ghostty_check is failed
-
-  always:
-    - name: Clean up Ghostty source
+    - name: Create Ghostty installation directories
       file:
-        state: absent
-        path: "/tmp/ghostty"
-      when: ghostty_check is failed
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - "{{ ansible_env.HOME }}/.local/bin"
+        - "{{ ansible_env.HOME }}/.local/share/ghostty"
+        - "{{ ansible_env.HOME }}/.local/share/applications"
+
+    - name: Download pinned Ghostty AppImage
+      get_url:
+        url: "https://github.com/pkgforge-dev/ghostty-appimage/releases/download/v{{ ghostty_appimage_version }}/Ghostty-{{ ghostty_appimage_version }}-{{ ansible_architecture }}.AppImage"
+        dest: "{{ ghostty_appimage_path }}"
+        checksum: "sha256:{{ ghostty_appimage_checksums[ansible_architecture] }}"
+        mode: '0755'
+
+    - name: Link Ghostty command to AppImage
+      file:
+        src: "{{ ghostty_appimage_path }}"
+        dest: "{{ ansible_env.HOME }}/.local/bin/ghostty"
+        state: link
+        force: true
+
+    - name: Add Ghostty desktop entry
+      copy:
+        dest: "{{ ansible_env.HOME }}/.local/share/applications/com.mitchellh.ghostty.desktop"
+        mode: '0644'
+        content: |
+          [Desktop Entry]
+          Type=Application
+          Name=Ghostty
+          Comment=Terminal emulator
+          Exec="{{ ghostty_appimage_path }}"
+          Icon=utilities-terminal
+          Terminal=false
+          Categories=System;TerminalEmulator;
+          StartupNotify=true
+          StartupWMClass=com.mitchellh.ghostty
+
+    # The AppImage bundles terminfo, but sudo applications need it on the host.
+    - name: Create temporary directory for Ghostty terminfo
+      tempfile:
+        state: directory
+        suffix: -ghostty-terminfo
+      register: ghostty_terminfo_temp
+
+    - name: Install bundled Ghostty terminfo on the host
+      block:
+        - name: Extract Ghostty terminfo
+          command:
+            argv:
+              - "{{ ghostty_appimage_path }}"
+              - --appimage-extract
+              - share/terminfo/x/xterm-ghostty
+            chdir: "{{ ghostty_terminfo_temp.path }}"
+          changed_when: false
+
+        - name: Create system terminfo directory
+          become: true
+          file:
+            path: /usr/share/terminfo/x
+            state: directory
+            mode: '0755'
+
+        - name: Install Ghostty terminfo for all users
+          become: true
+          copy:
+            src: "{{ ghostty_terminfo_temp.path }}/squashfs-root/share/terminfo/x/xterm-ghostty"
+            dest: /usr/share/terminfo/x/xterm-ghostty
+            remote_src: true
+            mode: '0644'
+      always:
+        - name: Remove temporary Ghostty terminfo directory
+          file:
+            path: "{{ ghostty_terminfo_temp.path }}"
+            state: absent

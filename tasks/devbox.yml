@@ -1,0 +1,48 @@
+- name: Devbox setup
+  tags: devbox
+  block:
+    - name: Check if Devbox is installed
+      stat:
+        path: /usr/local/bin/devbox
+      register: devbox_binary
+
+    - name: Install Devbox with the official Jetify installer
+      when: not devbox_binary.stat.exists
+      block:
+        - name: Install Devbox download dependencies
+          become: true
+          apt:
+            name:
+              - ca-certificates
+              - curl
+              - tar
+              - xz-utils
+            state: present
+
+        - name: Create temporary Devbox installer file
+          tempfile:
+            state: file
+            suffix: -devbox-installer.sh
+          register: devbox_installer
+
+        - name: Download and run Devbox installer
+          block:
+            - name: Download official Devbox installer
+              get_url:
+                url: https://raw.githubusercontent.com/jetify-com/devbox/main/install.sh
+                dest: "{{ devbox_installer.path }}"
+                mode: '0700'
+
+            - name: Run Devbox installer noninteractively
+              become: true
+              command:
+                argv:
+                  - /bin/bash
+                  - "{{ devbox_installer.path }}"
+                  - --force
+                creates: /usr/local/bin/devbox
+          always:
+            - name: Remove Devbox installer
+              file:
+                path: "{{ devbox_installer.path }}"
+                state: absent

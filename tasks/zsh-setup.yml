@@ -20,9 +20,25 @@
         depth: 1
 
     - name: Add antidote commands
-      shell: |
-        echo 'source ${ZDOTDIR:-~}/.antidote/antidote.zsh' >> "{{ ansible_env.HOME }}/.zshrc"
-        echo 'antidote load' >> "{{ ansible_env.HOME }}/.zshrc"
+      lineinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        create: true
+        mode: '0644'
+        line: "{{ item }}"
+      loop:
+        - 'source ${ZDOTDIR:-~}/.antidote/antidote.zsh'
+        - 'antidote load'
+
+    - name: Configure Homebrew and direnv for Zsh
+      blockinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        create: true
+        mode: '0644'
+        marker: "# {mark} ANSIBLE MANAGED DEVELOPMENT TOOLS"
+        block: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          export PATH="$HOME/.local/bin:$PATH"
+          eval "$(direnv hook zsh)"
 
     - name: Install starship
       shell: curl -sS https://starship.rs/install.sh | sh -s -- -y

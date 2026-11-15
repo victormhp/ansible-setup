@@ -2,15 +2,15 @@
   tags: brew
   block:
     - name: Check if Homebrew is already installed
-      command: which brew
+      stat:
+        path: /home/linuxbrew/.linuxbrew/bin/brew
       register: brew_check
-      ignore_errors: true
-      changed_when: false
 
     - name: Install Homebrew
-      when: brew_check is failed
+      when: not brew_check.stat.exists
       block:
         - name: Install required dependencies
+          become: true
           apt:
             name:
               - curl
@@ -32,12 +32,6 @@
             NONINTERACTIVE=1 /bin/bash /tmp/homebrew_installer.sh
           args:
             creates: "/home/linuxbrew/.linuxbrew/bin/brew"
-
-        - name: Add Homebrew to PATH in .bashrc
-          lineinfile:
-            dest: "~/.bashrc"
-            line: 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'
-            state: present
 
         - name: Clean up installer
           become: true
@@ -61,22 +55,23 @@
           - lazygit
           - fastfetch
           - nvim
-          - go
-          - zig
-          - uv
-          - fnm
-          - oven-sh/bun/bun
+          - direnv
+          - just
       block:
-        - name: Set Homebrew environment
-          shell: |
-            eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          args:
-            executable: /bin/bash
-
         - name: Install brew packages
           environment:
             PATH: "/home/linuxbrew/.linuxbrew/bin:{{ ansible_env.PATH }}"
-          homebrew:
-            name: "{{ item }}"
+          community.general.homebrew:
+            name: "{{ homebrew_packages }}"
             state: present
-          loop: "{{ homebrew_packages }}"
+
+    - name: Configure Homebrew and direnv for Bash
+      blockinfile:
+        path: "{{ ansible_env.HOME }}/.bashrc"
+        create: true
+        mode: '0644'
+        marker: "# {mark} ANSIBLE MANAGED DEVELOPMENT TOOLS"
+        block: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          export PATH="$HOME/.local/bin:$PATH"
+          eval "$(direnv hook bash)"
